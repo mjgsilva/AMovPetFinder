@@ -1,0 +1,1 @@
+global.TOKEN_TIMETOLIVE = 60*60*24;
