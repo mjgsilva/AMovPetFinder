@@ -1,5 +1,6 @@
 var mongoose = require('mongoose')
-    , bcrypt = require('bcrypt-nodejs');
+    , bcrypt = require('bcrypt-nodejs')
+    , autoIncrement = require('mongoose-auto-increment');
 
 var userSchema = new mongoose.Schema({
     username: {
@@ -25,10 +26,13 @@ var userSchema = new mongoose.Schema({
         required: true,
         default: Date.now
     }
-    
 });
 
 userSchema.index({ username: 1 });
+
+autoIncrement.initialize(mongoose.connection);
+
+userSchema.plugin(autoIncrement.plugin, { model: 'User', field: 'userId', startAt: 1, incrementBy: 1 });
 
 userSchema.pre('save', function(callback) {
     var user = this;

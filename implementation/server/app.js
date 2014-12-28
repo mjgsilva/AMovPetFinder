@@ -1,5 +1,4 @@
 var express = require('express');
-var http = require('http');
 var https = require('https');
 var fs = require('fs');
 var passport = require('passport');
@@ -36,5 +35,4 @@ router.route('/oauth/token')
 
 app.use('/api', router);
 
-http.createServer(app).listen(3000);
 https.createServer(certs, app).listen(4000);

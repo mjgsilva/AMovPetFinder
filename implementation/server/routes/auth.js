@@ -40,7 +40,7 @@ passport.use("accessToken", new BearerStrategy(
             if (new Date() > tokenRecord.expirationDate) {
                 Token.remove({accessToken: accessTokenHash}, function (err) { callback(err) })
             } else {
-                User.findOne({username: tokenRecord.userId}, function (err, userRecord) {
+                User.findOne({userId: tokenRecord.userId}, function (err, userRecord) {
                     if (err) { return callback(err) }
                     if (!userRecord) { return callback(null, false) }
                     callback(null, userRecord);
