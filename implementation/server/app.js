@@ -35,11 +35,12 @@ router.route('/post')
     .post(authController.isBearerAuthenticated,postController.createPost)
     .get(authController.isBearerAuthenticated,postController.getPosts);
 
+router.route('/post/:post_id')
+    .get(authController.isBearerAuthenticated,postController.getPost)
+    .delete(authController.isBearerAuthenticated,postController.removePost);
+
 router.route('/myPosts')
     .get(authController.isBearerAuthenticated,postController.myPosts);
-
-router.route('/post/:post_id')
-    .get(authController.isBearerAuthenticated,postController.getPost);
 
 router.route('/oauth/token')
     .post(authController.isClientAuthenticated, oauthController.token);
