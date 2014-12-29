@@ -10,6 +10,6 @@ exports.createUser = function(req, res) {
 
     user.save(function(err){
         if(err) { res.send(err.message); }
-        else { res.json({ message: 'User registed!' }) };
+        else { res.json({ response: "ok" }) };
     });
 };

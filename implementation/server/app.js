@@ -8,6 +8,7 @@ var userController = require('./routes/user');
 var clientController = require('./routes/client');
 var authController = require('./routes/auth');
 var oauthController = require('./routes/oauth');
+var postController = require('./routes/post');
 
 var app = express();
 var nodekey = fs.readFileSync('certs/nodekey.pem');
@@ -29,6 +30,16 @@ router.route('/user')
 
 router.route('/client')
     .post(clientController.createClient);
+
+router.route('/post')
+    .post(authController.isBearerAuthenticated,postController.createPost)
+    .get(authController.isBearerAuthenticated,postController.getPosts);
+
+router.route('/myPosts')
+    .get(authController.isBearerAuthenticated,postController.myPosts);
+
+router.route('/post/:post_id')
+    .get(authController.isBearerAuthenticated,postController.getPost);
 
 router.route('/oauth/token')
     .post(authController.isClientAuthenticated, oauthController.token);
