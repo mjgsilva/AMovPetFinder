@@ -50,8 +50,7 @@ var postSchema = new mongoose.Schema({
     }
 });
 
-
-postSchema.index({ loc: '2d' });
+postSchema.index({ location: '2d' });
 
 autoIncrement.initialize(mongoose.connection);
 

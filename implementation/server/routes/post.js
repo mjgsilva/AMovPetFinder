@@ -1,6 +1,7 @@
 var Post = require('../models/post')
     , Token = require('../models/token')
     , utils = require('../models/utils')
+    , constants = require('../models/constants')
     , rs = require('random-strings');
 
 exports.createPost = function(req, res) {
@@ -11,7 +12,7 @@ exports.createPost = function(req, res) {
             var post = new Post({
                 userId: tokenRecord.userId,
                 type: req.body.type,
-                location: [req.body.lon, req.body.lat],
+                location: [req.body.lat, req.body.long],
                 images: req.body.images,
                 metadata: {
                     specie: req.body.specie,
@@ -69,5 +70,26 @@ exports.removePost = function(req, res) {
             });
         }
     });
-}
+};
 
+exports.findPost = function(req, res) {
+
+    if (!req.body.lat || !req.body.long || !req.body.specie) {
+        res.send({});
+        return
+    }
+
+    var query = Post.find({
+        'location': {$near: [req.body.lat, req.body.long], $maxDistance: POST_GEODISTANCE},
+        'metadata.specie': req.body.specie
+    });
+
+    if (req.body.size) { query.where('metadata.size').equals(req.body.size); }
+
+    if (req.body.color) { query.where('metadata.color').in(req.body.color); }
+
+    query.exec(function(err, posts){
+        if(err) { res.send(err) }
+        else { res.send(posts) }
+    });
+};

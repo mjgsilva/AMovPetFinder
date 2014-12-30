@@ -42,6 +42,9 @@ router.route('/post/:post_id')
 router.route('/myPosts')
     .get(authController.isBearerAuthenticated,postController.myPosts);
 
+router.route('/find')
+    .post(authController.isBearerAuthenticated,postController.findPost)
+
 router.route('/oauth/token')
     .post(authController.isClientAuthenticated, oauthController.token);
 

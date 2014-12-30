@@ -22,7 +22,7 @@ exports.createClient = function(req, res) {
                 else { res.json(pair) }
             });
         } else {
-            res.json({err: "Not Valid!"})
+            res.json({"valid": "notok"})
         }
     });
 };
