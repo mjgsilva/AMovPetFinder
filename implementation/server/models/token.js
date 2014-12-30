@@ -14,7 +14,7 @@ var tokenSchema = new mongoose.Schema({
         required: true
     },
     userId: {
-        type: String,
+        type: Number,
         required: true
     },
     clientId: {

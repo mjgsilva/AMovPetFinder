@@ -3,6 +3,7 @@ var oauth2orize = require('oauth2orize')
     , crypto = require('crypto')
     , rs = require('random-strings')
     , constants = require('../models/constants')
+    , utils = require('../models/utils')
     , User = require('../models/user')
     , Token = require('../models/token');
 
@@ -10,16 +11,10 @@ var server = oauth2orize.createServer();
 
 server.exchange(oauth2orize.exchange.password(function (client, username, password, callback) {
     User.findOne({username: username}, function (err, userRecord) {
-        if (err) {
-            return callback(err)
-        }
-        if (!userRecord) {
-            return callback(null, false)
-        }
+        if (err) { return callback(err) }
+        if (!userRecord) { return callback(null, false) }
         userRecord.verifyPassword(password, function (err, isValid) {
-            if (!isValid) {
-                return callback(null, false)
-            }
+            if (!isValid) { return callback(null, false) }
 
             var generatedAccessToken = rs.alphaNumMixed(256);
             var generatedRefreshToken = rs.alphaNumMixed(256);
@@ -32,7 +27,7 @@ server.exchange(oauth2orize.exchange.password(function (client, username, passwo
                 accessToken: accessTokenHash,
                 refreshToken: refreshTokenHash,
                 expirationDate: date,
-                userId: userRecord.username,
+                userId: userRecord.userId,
                 clientId: client.clientId
             });
 
@@ -64,9 +59,22 @@ server.exchange(oauth2orize.exchange.refreshToken(function (client, refreshToken
             callback(null, newAccessToken, refreshToken, {expires_in: expirationDate});
         })
     })
-}))
+}));
+
+exports.logout = function(req, res) {
+    var accessToken = utils.getAccessToken(req.headers.authorization);
+    Token.findOne({accessToken: accessToken}, function (err, tokenRecord) {
+        if (err) { return callback(err) }
+        if (!tokenRecord) { return callback(null, false) }
+        Token.remove({accessToken: accessToken}, function (err, response) {
+            if(err) {res.send(err)
+            } else {
+                res.send({valid: "ok"})
+            }})
+    })
+};
 
 exports.token = [
     server.token(),
     server.errorHandler()
-]
+];

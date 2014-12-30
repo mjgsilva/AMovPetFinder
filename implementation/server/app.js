@@ -1,5 +1,4 @@
 var express = require('express');
-var http = require('http');
 var https = require('https');
 var fs = require('fs');
 var passport = require('passport');
@@ -9,6 +8,7 @@ var userController = require('./routes/user');
 var clientController = require('./routes/client');
 var authController = require('./routes/auth');
 var oauthController = require('./routes/oauth');
+var postController = require('./routes/post');
 
 var app = express();
 var nodekey = fs.readFileSync('certs/nodekey.pem');
@@ -31,10 +31,26 @@ router.route('/user')
 router.route('/client')
     .post(clientController.createClient);
 
+router.route('/post')
+    .post(authController.isBearerAuthenticated,postController.createPost)
+    .get(authController.isBearerAuthenticated,postController.getPosts);
+
+router.route('/post/:post_id')
+    .get(authController.isBearerAuthenticated,postController.getPost)
+    .delete(authController.isBearerAuthenticated,postController.removePost);
+
+router.route('/myPosts')
+    .get(authController.isBearerAuthenticated,postController.myPosts);
+
+router.route('/find')
+    .post(authController.isBearerAuthenticated,postController.findPost)
+
 router.route('/oauth/token')
-    .post(authController.isClientAuthenticated, oauthController.token);
+    .post(authController.isClientAuthenticated,oauthController.token);
+
+router.route('/oauth/logout')
+    .post(authController.isBearerAuthenticated,oauthController.logout);
 
 app.use('/api', router);
 
-http.createServer(app).listen(3000);
 https.createServer(certs, app).listen(4000);
