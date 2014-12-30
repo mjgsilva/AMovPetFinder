@@ -46,7 +46,10 @@ router.route('/find')
     .post(authController.isBearerAuthenticated,postController.findPost)
 
 router.route('/oauth/token')
-    .post(authController.isClientAuthenticated, oauthController.token);
+    .post(authController.isClientAuthenticated,oauthController.token);
+
+router.route('/oauth/logout')
+    .post(authController.isBearerAuthenticated,oauthController.logout);
 
 app.use('/api', router);
 
