@@ -20,7 +20,7 @@ public class StartActivity extends Activity {
                 new AuthenticateUserTask.Parameters(username, password).setConnTimeout(5000)) {
 
             @Override
-            public void onPostExecute(String accessToken, long refreshTime, long expiresIn) {
+            public void onPostExecute(String accessToken, String refreshToken, long expiresIn) {
                 // TODO do something meaningful
             }
         };
