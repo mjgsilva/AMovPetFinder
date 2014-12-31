@@ -32,7 +32,7 @@ public class AuthenticateUserTask extends WebServiceTask {
     public void onPostExecute(final String accessToken, final long refreshTime, final long expiresIn) {
         // override to provide some meaningful behavior
     }
-e
+
     public static class Builder extends BaseBuilder<AuthenticateUserTask> {
 
         public static final String USERNAME = "username";
