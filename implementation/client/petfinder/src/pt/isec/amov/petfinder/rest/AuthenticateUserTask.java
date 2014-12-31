@@ -14,8 +14,8 @@ import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.POST;
  */
 public class AuthenticateUserTask extends WebServiceTask {
 
-    private AuthenticateUserTask(final Context ctx, final TaskType taskType, final int connTimeout, final int socketTimeout, List<? extends NameValuePair> params) {
-        super(ctx, taskType, connTimeout, socketTimeout, params);
+    private AuthenticateUserTask(final Context ctx, final Parameters params) {
+        super(ctx, POST, params.getConnTimeout(), params.getSocketTimeout(), params.getParams());
     }
 
     @Override
@@ -33,21 +33,14 @@ public class AuthenticateUserTask extends WebServiceTask {
         // override to provide some meaningful behavior
     }
 
-    public static class Builder extends BaseBuilder<AuthenticateUserTask> {
+    public static class Parameters extends BaseParameters<Parameters> {
 
         public static final String USERNAME = "username";
         public static final String PASSWORD = "password";
 
-        private List<NameValuePair> params = new ArrayList<NameValuePair>();
-
-        public Builder(final String username, final String password) {
+        public Parameters(final String username, final String password) {
             params.add(new BasicNameValuePair(USERNAME, username));
             params.add(new BasicNameValuePair(PASSWORD, password));
-        }
-
-        @Override
-        public AuthenticateUserTask build(final Context ctx, final int connTimeout, final int socketTimeout) {
-            return new AuthenticateUserTask(ctx, POST, connTimeout, socketTimeout, params);
         }
 
     }

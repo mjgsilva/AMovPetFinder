@@ -41,6 +41,7 @@ public class WebServiceTask extends AsyncTask<String, Integer, String> {
     private List<? extends NameValuePair> params;
 
     protected WebServiceTask(final Context ctx, final TaskType taskType, final int connTimeout, final int socketTimeout, final List<? extends NameValuePair> params) {
+        // TODO add null checks
         this.ctx = ctx;
         this.taskType = taskType;
         this.connTimeout = connTimeout;
