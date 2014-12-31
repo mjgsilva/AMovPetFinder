@@ -99,12 +99,12 @@ public class WebServiceTask extends AsyncTask<String, Integer, String> {
 
     private HttpParams getHttpParams() {
 
-        HttpParams htpp = new BasicHttpParams();
+        HttpParams http = new BasicHttpParams();
 
-        HttpConnectionParams.setConnectionTimeout(htpp, connTimeout);
-        HttpConnectionParams.setSoTimeout(htpp, socketTimeout);
+        HttpConnectionParams.setConnectionTimeout(http, connTimeout);
+        HttpConnectionParams.setSoTimeout(http, socketTimeout);
 
-        return htpp;
+        return http;
     }
 
     private HttpResponse doResponse(String url) {
