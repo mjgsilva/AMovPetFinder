@@ -11,8 +11,8 @@ import java.util.List;
  */
 public abstract class BaseParameters<T extends BaseParameters> {
 
-    private int connTimeout;
-    private int socketTimeout;
+    private int connTimeout = WebServiceTask.CONN_TIMEOUT;
+    private int socketTimeout = WebServiceTask.SOCKET_TIMEOUT;
     protected List<NameValuePair> params = new ArrayList<NameValuePair>();
 
     public int getConnTimeout() {

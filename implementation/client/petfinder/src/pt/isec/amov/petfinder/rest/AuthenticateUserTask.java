@@ -1,11 +1,7 @@
 package pt.isec.amov.petfinder.rest;
 
 import android.content.Context;
-import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.POST;
 
@@ -14,7 +10,7 @@ import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.POST;
  */
 public class AuthenticateUserTask extends WebServiceTask {
 
-    private AuthenticateUserTask(final Context ctx, final Parameters params) {
+    public AuthenticateUserTask(final Context ctx, final Parameters params) {
         super(ctx, POST, params.getConnTimeout(), params.getSocketTimeout(), params.getParams());
     }
 

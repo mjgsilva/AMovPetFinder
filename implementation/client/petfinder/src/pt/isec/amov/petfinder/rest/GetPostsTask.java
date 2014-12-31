@@ -16,7 +16,7 @@ import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.GET;
  */
 public class GetPostsTask extends WebServiceTask {
 
-    private GetPostsTask(Context ctx, final Parameters params) {
+    public GetPostsTask(Context ctx, final Parameters params) {
         super(ctx, GET, params.getConnTimeout(), params.getSocketTimeout(), params.getParams());
     }
 
