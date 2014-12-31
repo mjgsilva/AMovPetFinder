@@ -11,7 +11,6 @@ var userSchema = new mongoose.Schema({
     email: {
         type: String,
         unique: true,
-        required: true,
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Invalid email!']
     },
     password: {
@@ -46,7 +45,7 @@ userSchema.pre('save', function(callback) {
         });
     });
 });
-
+s
 userSchema.methods.verifyPassword = function(password, callback) {
     bcrypt.compare(password, this.password, function(err, isValid) {
         if(err) { return callback(err); }
