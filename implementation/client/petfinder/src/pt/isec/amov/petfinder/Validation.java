@@ -1,7 +1,7 @@
 package pt.isec.amov.petfinder;
 
 /**
- * Created by mgois on 01-01-2015.
+ * Validation utility classes
  */
 public class Validation {
 

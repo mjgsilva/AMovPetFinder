@@ -3,7 +3,7 @@ package pt.isec.amov.petfinder.rest;
 import static pt.isec.amov.petfinder.Validation.assertNotNullOrEmpty;
 
 /**
- * Created by mgois on 01-01-2015.
+ * Credentials to use in the REST API requests
  */
 public class Credentials {
 

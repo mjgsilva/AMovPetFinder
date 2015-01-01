@@ -128,7 +128,6 @@ public class WebServiceTask extends AsyncTask<String, Integer, String> {
                     httpPost.addHeader(CONTENT_TYPE, MIME_JSON);
                     configureRequest(httpPost);
 
-                    // Add parameters
                     httpPost.setEntity(new UrlEncodedFormEntity(params));
 
                     response = httpclient.execute(httpPost);

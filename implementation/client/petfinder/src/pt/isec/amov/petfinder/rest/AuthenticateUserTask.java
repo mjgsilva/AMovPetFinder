@@ -20,10 +20,10 @@ public class AuthenticateUserTask extends WebServiceTask {
     }
 
     @Override
-    protected void configureRequest(HttpPost post) {
+    protected void configureRequest(final HttpPost post) {
         final String cred = credentials.getId() + ":" + credentials.getSecret();
-        final String bearer = Base64.encodeToString(cred.getBytes(), Base64.NO_WRAP);
-        post.setHeader(AUTH, BEARER + " " + bearer);
+        final String encoded = Base64.encodeToString(cred.getBytes(), Base64.NO_WRAP);
+        post.setHeader(AUTH, BASIC + " " + encoded);
     }
 
     @Override
