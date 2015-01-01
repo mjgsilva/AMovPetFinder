@@ -33,6 +33,12 @@ public class WebServiceTask extends AsyncTask<String, Integer, String> {
     // socket timeout, in milliseconds (waiting for data)
     public static final int SOCKET_TIMEOUT = 5000;
 
+    public static final String CONTENT_TYPE = "Content-Type";
+    public static final String MIME_JSON = "application/json";
+    public static final String AUTH = "Authorization";
+    public static final String BEARER = "Bearer ";
+    public static final String BASIC = "Basic ";
+
     private final TaskType taskType;
     private final int connTimeout;
     private final int socketTimeout;
@@ -112,7 +118,6 @@ public class WebServiceTask extends AsyncTask<String, Integer, String> {
         // Use our connection and data timeouts as parameters for our
         // DefaultHttpClient
         HttpClient httpclient = new DefaultHttpClient(getHttpParams());
-
         HttpResponse response = null;
 
         try {
