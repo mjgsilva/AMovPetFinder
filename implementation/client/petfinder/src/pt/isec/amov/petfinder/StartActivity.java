@@ -3,7 +3,7 @@ package pt.isec.amov.petfinder;
 import android.app.Activity;
 import android.os.Bundle;
 import pt.isec.amov.petfinder.rest.AuthenticateUserTask;
-import pt.isec.amov.petfinder.rest.Credentials;
+import pt.isec.amov.petfinder.rest.ApiParams;
 
 public class StartActivity extends Activity {
     /**
@@ -15,10 +15,10 @@ public class StartActivity extends Activity {
         setContentView(R.layout.start_activity);
 
         // Usage example
-        final Credentials credentials = new Credentials("", "");
+        final ApiParams credentials = new ApiParams("", "", "");
         final String username = "";
         final String password = "";
-        final AuthenticateUserTask task = new AuthenticateUserTask(this, credentials,
+        final AuthenticateUserTask task = new AuthenticateUserTask(credentials,
                 new AuthenticateUserTask.Parameters(username, password).setConnTimeout(5000)) {
 
             @Override

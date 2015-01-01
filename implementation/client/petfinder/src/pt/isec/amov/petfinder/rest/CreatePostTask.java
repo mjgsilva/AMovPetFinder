@@ -11,10 +11,12 @@ import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.POST;
  */
 public class CreatePostTask extends WebServiceTask {
 
+    private static final String PATH = "/post";
+
     private final String token;
 
-    protected CreatePostTask(final Context ctx, final String token, final GetPostsTask.Parameters params) {
-        super(ctx, POST, params.getConnTimeout(), params.getSocketTimeout(), params.getParams());
+    protected CreatePostTask(final ApiParams apiParams, final String token, final GetPostsTask.Parameters params) {
+        super(POST, params.getConnTimeout(), params.getSocketTimeout(), apiParams.getUrl(PATH), params.getParams());
         this.token = token;
     }
 

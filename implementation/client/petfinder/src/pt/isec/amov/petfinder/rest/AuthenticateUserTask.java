@@ -12,11 +12,13 @@ import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.POST;
  */
 public class AuthenticateUserTask extends WebServiceTask {
 
-    private final Credentials credentials;
+    private static final String PATH = "/oauth/token";
 
-    public AuthenticateUserTask(final Context ctx, final Credentials credentials, final Parameters params) {
-        super(ctx, POST, params.getConnTimeout(), params.getSocketTimeout(), params.getParams());
-        this.credentials = credentials;
+    private final ApiParams credentials;
+
+    public AuthenticateUserTask(final ApiParams apiParams, final Parameters params) {
+        super(POST, params.getConnTimeout(), params.getSocketTimeout(), apiParams.getUrl(PATH), params.getParams());
+        this.credentials = apiParams;
     }
 
     @Override

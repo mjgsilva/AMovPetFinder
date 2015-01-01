@@ -1,6 +1,5 @@
 package pt.isec.amov.petfinder.rest;
 
-import android.content.Context;
 import android.graphics.Color;
 import com.google.android.gms.maps.model.LatLng;
 import org.apache.http.message.BasicNameValuePair;
@@ -16,8 +15,10 @@ import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.GET;
  */
 public class GetPostsTask extends WebServiceTask {
 
-    public GetPostsTask(Context ctx, final Parameters params) {
-        super(ctx, GET, params.getConnTimeout(), params.getSocketTimeout(), params.getParams());
+    private static final String PATH = "/post";
+
+    public GetPostsTask(final ApiParams apiParams, final Parameters params) {
+        super(GET, params.getConnTimeout(), params.getSocketTimeout(), apiParams.getUrl(PATH), params.getParams());
     }
 
     @Override

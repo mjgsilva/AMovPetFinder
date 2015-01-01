@@ -1,6 +1,5 @@
 package pt.isec.amov.petfinder.rest;
 
-import android.content.Context;
 import org.apache.http.message.BasicNameValuePair;
 
 import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.POST;
@@ -10,8 +9,10 @@ import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.POST;
  */
 public class SignUpTask extends WebServiceTask {
 
-    protected SignUpTask(final Context ctx, final GetPostsTask.Parameters params) {
-        super(ctx, POST, params.getConnTimeout(), params.getSocketTimeout(), params.getParams());
+    private static final String PATH = "/user";
+
+    protected SignUpTask(final ApiParams apiParams, final Parameters params) {
+        super(POST, params.getConnTimeout(), params.getSocketTimeout(), apiParams.getUrl(PATH), params.getParams());
     }
 
     @Override

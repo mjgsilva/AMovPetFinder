@@ -23,7 +23,7 @@ import java.util.List;
 /**
  *
  */
-public class WebServiceTask extends AsyncTask<String, Integer, String> {
+public class WebServiceTask extends AsyncTask<Void, Integer, String> {
 
     private static final String TAG = "WebServiceTask";
 
@@ -42,22 +42,21 @@ public class WebServiceTask extends AsyncTask<String, Integer, String> {
     private final TaskType taskType;
     private final int connTimeout;
     private final int socketTimeout;
-    private final Context ctx;
+    private final String url;
 
     private List<? extends NameValuePair> params;
 
-    protected WebServiceTask(final Context ctx, final TaskType taskType, final int connTimeout, final int socketTimeout, final List<? extends NameValuePair> params) {
+    protected WebServiceTask(final TaskType taskType, final int connTimeout, final int socketTimeout, final String url, final List<? extends NameValuePair> params) {
         // TODO add null checks
-        this.ctx = ctx;
         this.taskType = taskType;
         this.connTimeout = connTimeout;
         this.socketTimeout = socketTimeout;
         this.params = params;
+        this.url = url;
     }
 
     @Override
-    protected String doInBackground(final String... urls) {
-        String url = urls[0];
+    protected String doInBackground(final Void... params) {
         String result = "";
 
         HttpResponse response = doResponse(url);
