@@ -36,8 +36,8 @@ public class WebServiceTask extends AsyncTask<String, Integer, String> {
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String MIME_JSON = "application/json";
     public static final String AUTH = "Authorization";
-    public static final String BEARER = "Bearer ";
-    public static final String BASIC = "Basic ";
+    public static final String BEARER = "Bearer";
+    public static final String BASIC = "Basic";
 
     private final TaskType taskType;
     private final int connTimeout;
@@ -124,15 +124,21 @@ public class WebServiceTask extends AsyncTask<String, Integer, String> {
             switch (taskType) {
 
                 case POST:
-                    HttpPost httppost = new HttpPost(url);
-                    // Add parameters
-                    httppost.setEntity(new UrlEncodedFormEntity(params));
+                    HttpPost httpPost = new HttpPost(url);
+                    httpPost.addHeader(CONTENT_TYPE, MIME_JSON);
+                    configureRequest(httpPost);
 
-                    response = httpclient.execute(httppost);
+                    // Add parameters
+                    httpPost.setEntity(new UrlEncodedFormEntity(params));
+
+                    response = httpclient.execute(httpPost);
                     break;
                 case GET:
-                    HttpGet httpget = new HttpGet(url);
-                    response = httpclient.execute(httpget);
+                    HttpGet httpGet = new HttpGet(url);
+                    httpGet.addHeader(CONTENT_TYPE, MIME_JSON);
+                    configureRequest(httpGet);
+
+                    response = httpclient.execute(httpGet);
                     break;
             }
         } catch (Exception e) {
@@ -143,6 +149,10 @@ public class WebServiceTask extends AsyncTask<String, Integer, String> {
 
         return response;
     }
+
+    protected void configureRequest(final HttpPost post) { }
+
+    protected void configureRequest(final HttpGet get) { }
 
     public static enum TaskType {
 

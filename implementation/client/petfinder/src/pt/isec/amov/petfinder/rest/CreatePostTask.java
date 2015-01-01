@@ -1,6 +1,7 @@
 package pt.isec.amov.petfinder.rest;
 
 import android.content.Context;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 
 import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.POST;
@@ -10,8 +11,16 @@ import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.POST;
  */
 public class CreatePostTask extends WebServiceTask {
 
-    protected CreatePostTask(final Context ctx, final GetPostsTask.Parameters params) {
+    private final String token;
+
+    protected CreatePostTask(final Context ctx, final String token, final GetPostsTask.Parameters params) {
         super(ctx, POST, params.getConnTimeout(), params.getSocketTimeout(), params.getParams());
+        this.token = token;
+    }
+
+    @Override
+    protected void configureRequest(final HttpPost post) {
+        post.addHeader(AUTH, BEARER + " " + token);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package pt.isec.amov.petfinder.rest;
 
 import android.content.Context;
+import android.util.Base64;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 
 import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.POST;
@@ -10,8 +12,18 @@ import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.POST;
  */
 public class AuthenticateUserTask extends WebServiceTask {
 
-    public AuthenticateUserTask(final Context ctx, final Parameters params) {
+    private final Credentials credentials;
+
+    public AuthenticateUserTask(final Context ctx, final Credentials credentials, final Parameters params) {
         super(ctx, POST, params.getConnTimeout(), params.getSocketTimeout(), params.getParams());
+        this.credentials = credentials;
+    }
+
+    @Override
+    protected void configureRequest(HttpPost post) {
+        final String cred = credentials.getId() + ":" + credentials.getSecret();
+        final String bearer = Base64.encodeToString(cred.getBytes(), Base64.NO_WRAP);
+        post.setHeader(AUTH, BEARER + " " + bearer);
     }
 
     @Override
