@@ -1,6 +1,5 @@
 var express = require('express');
-var https = require('https');
-var fs = require('fs');
+var http = require('http');
 var passport = require('passport');
 var bodyParser = require('body-parser');
 var dbModel = require('./models/db');
@@ -11,13 +10,6 @@ var oauthController = require('./routes/oauth');
 var postController = require('./routes/post');
 
 var app = express();
-var nodekey = fs.readFileSync('certs/nodekey.pem');
-var nodecert = fs.readFileSync('certs/nodecert.pem');
-
-var certs = {
-    key: nodekey,
-    cert: nodecert
-};
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -53,4 +45,4 @@ router.route('/oauth/logout')
 
 app.use('/api', router);
 
-https.createServer(certs, app).listen(4000);
+http.createServer(app).listen(3545);
