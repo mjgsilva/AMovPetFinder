@@ -22,6 +22,7 @@ server.exchange(oauth2orize.exchange.password(function (client, username, passwo
             var refreshTokenHash = crypto.createHash('sha1').update(generatedRefreshToken).digest('hex')
             var date = new Date()
             date.setSeconds(date.getSeconds() + TOKEN_TIMETOLIVE)
+            var unixtime = Math.floor(date.getTime() / 1000)
 
             var token = new Token({
                 accessToken: accessTokenHash,
@@ -33,7 +34,7 @@ server.exchange(oauth2orize.exchange.password(function (client, username, passwo
 
             token.save(function (err) {
                 if (err) { return callback(err) }
-                callback(null, generatedAccessToken, generatedRefreshToken, {expires_in: token.expirationDate})
+                callback(null, generatedAccessToken, generatedRefreshToken, {expires_in: unixtime})
             })
         })
     })
@@ -53,10 +54,11 @@ server.exchange(oauth2orize.exchange.refreshToken(function (client, refreshToken
         var date = new Date()
         date.setSeconds(date.getSeconds() + TOKEN_TIMETOLIVE)
         var expirationDate = date
+        var unixtime = Math.floor(date.getTime() / 1000)
 
         Token.update({refreshToken: tokenRecord.refreshToken}, {$set: {token: accessTokenHash, expirationDate: expirationDate}}, function (err) {
             if (err) { return callback(err) }
-            callback(null, newAccessToken, refreshToken, {expires_in: expirationDate});
+            callback(null, newAccessToken, refreshToken, {expires_in: unixtime});
         })
     })
 }));
