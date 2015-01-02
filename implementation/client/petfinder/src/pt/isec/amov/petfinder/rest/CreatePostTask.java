@@ -1,6 +1,5 @@
 package pt.isec.amov.petfinder.rest;
 
-import android.content.Context;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -15,8 +14,8 @@ public class CreatePostTask extends WebServiceTask {
 
     private final String token;
 
-    protected CreatePostTask(final ApiParams apiParams, final String token, final GetPostsTask.Parameters params) {
-        super(POST, params.getConnTimeout(), params.getSocketTimeout(), apiParams.getUrl(PATH), params.getParams());
+    protected CreatePostTask(final ApiParams apiParams, final String token, final GetPostsAdvancedTask.Parameters params) {
+        super(POST, params.getConnTimeout(), params.getSocketTimeout(), apiParams.getUrl(PATH), params.getBodyRequest());
         this.token = token;
     }
 
@@ -50,32 +49,32 @@ public class CreatePostTask extends WebServiceTask {
         public static final String OBSERVATIONS = "obs";
 
         public Parameters(final String postType, final String latitude, final String longitude, final String specie) {
-            params.add(new BasicNameValuePair(POST_TYPE, postType));
-            params.add(new BasicNameValuePair(LATITUDE, latitude));
-            params.add(new BasicNameValuePair(LONGITUDE, longitude));
-            params.add(new BasicNameValuePair(SPECIE, specie));
+            insertPair(POST_TYPE, postType);
+            insertPair(LATITUDE, latitude);
+            insertPair(LONGITUDE, longitude);
+            insertPair(SPECIE, specie);
         }
 
         public Parameters image(final String image) {
-            params.add(new BasicNameValuePair(IMAGE, image));
+            insertPair(IMAGE, image);
 
             return this;
         }
 
         public Parameters size(final String size) {
-            params.add(new BasicNameValuePair(SIZE, size));
+            insertPair(SIZE, size);
 
             return this;
         }
 
         public Parameters color(final String color) {
-            params.add(new BasicNameValuePair(COLOR, color));
+            insertPair(COLOR, color);
 
             return this;
         }
 
         public Parameters observation(final String observation) {
-            params.add(new BasicNameValuePair(OBSERVATIONS, observation));
+            insertPair(OBSERVATIONS, observation);
 
             return this;
         }

@@ -2,8 +2,11 @@ package pt.isec.amov.petfinder.rest;
 
 import android.content.Context;
 import android.util.Base64;
+import android.util.Log;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.POST;
 
@@ -12,13 +15,15 @@ import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.POST;
  */
 public class AuthenticateUserTask extends WebServiceTask {
 
+    private static final String TAG = "AuthenticateUserTask";
     private static final String PATH = "/oauth/token";
 
     private final ApiParams credentials;
 
     public AuthenticateUserTask(final ApiParams apiParams, final Parameters params) {
-        super(POST, params.getConnTimeout(), params.getSocketTimeout(), apiParams.getUrl(PATH), params.getParams());
+        super(POST, params.getConnTimeout(), params.getSocketTimeout(), apiParams.getUrl(PATH), params.getBodyRequest());
         this.credentials = apiParams;
+        super.execute();
     }
 
     @Override
@@ -50,10 +55,9 @@ public class AuthenticateUserTask extends WebServiceTask {
         public static final String GRANT_TYPE = "grant_type";
 
         public Parameters(final String username, final String password) {
-            params.add(new BasicNameValuePair(USERNAME, username));
-            params.add(new BasicNameValuePair(PASSWORD, password));
-            params.add(new BasicNameValuePair(GRANT_TYPE, PASSWORD));
+            insertPair(USERNAME, username);
+            insertPair(PASSWORD, password);
+            insertPair(GRANT_TYPE, PASSWORD);
         }
-
     }
 }

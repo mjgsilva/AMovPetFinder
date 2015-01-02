@@ -12,7 +12,7 @@ public class SignUpTask extends WebServiceTask {
     private static final String PATH = "/user";
 
     protected SignUpTask(final ApiParams apiParams, final Parameters params) {
-        super(POST, params.getConnTimeout(), params.getSocketTimeout(), apiParams.getUrl(PATH), params.getParams());
+        super(POST, params.getConnTimeout(), params.getSocketTimeout(), apiParams.getUrl(PATH), params.getBodyRequest());
     }
 
     @Override
@@ -35,9 +35,9 @@ public class SignUpTask extends WebServiceTask {
         public static final String PHONE_NUMBER = "phoneNumber";
 
         public Parameters(final String username, final String password, final String phoneNumber) {
-            params.add(new BasicNameValuePair(USERNAME, username));
-            params.add(new BasicNameValuePair(PASSWORD, password));
-            params.add(new BasicNameValuePair(PHONE_NUMBER, phoneNumber));
+            insertPair(USERNAME, username);
+            insertPair(PASSWORD, password);
+            insertPair(PHONE_NUMBER, phoneNumber);
         }
     }
 }
