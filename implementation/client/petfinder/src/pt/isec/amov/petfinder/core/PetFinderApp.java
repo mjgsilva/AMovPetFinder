@@ -3,7 +3,7 @@ package pt.isec.amov.petfinder.core;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import pt.isec.amov.petfinder.entities.Token;
+import android.preference.PreferenceManager;
 
 /**
  * Created by mario on 02/01/15.
@@ -12,8 +12,9 @@ public class PetFinderApp extends Application {
     private SharedPreferences sharedPreferences;
     private Token token;
 
-    public PetFinderApp() {
-        sharedPreferences = getSharedPreferences("petfinder",MODE_PRIVATE);
+    @Override
+    public void onCreate() {
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         token = tokenBuilder();
     }
 
@@ -37,5 +38,6 @@ public class PetFinderApp extends Application {
         editor.putString("accessToken",token.getAccessToken());
         editor.putString("refreshToken",token.getRefreshToken());
         editor.putLong("expiresIn",token.getExpiresIn());
+        editor.commit();
     }
 }
