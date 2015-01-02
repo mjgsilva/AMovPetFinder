@@ -35,7 +35,7 @@ public class AuthenticateUserTask extends WebServiceTask {
 
     @Override
     protected void onPostExecute(final String response) {
-        boolean loginIsValid = false;
+        boolean isLoginValid = false;
         String accessToken = "";
         String refreshToken = "";
         long expiresIn = 0;
@@ -48,13 +48,13 @@ public class AuthenticateUserTask extends WebServiceTask {
                 refreshToken = obj.getString("refresh_token");
                 expiresIn = obj.getLong("expires_in");
             } catch (JSONException e) {}
-            loginIsValid = true;
+            isLoginValid = true;
         }
         // call the task-specific overload
-        this.onPostExecute(loginIsValid,accessToken, refreshToken, expiresIn);
+        this.onPostExecute(isLoginValid,accessToken, refreshToken, expiresIn);
     }
 
-    public void onPostExecute(final boolean loginIsValid, final String accessToken, final String refreshToken, final long expiresIn) {
+    public void onPostExecute(final boolean isLoginValid, final String accessToken, final String refreshToken, final long expiresIn) {
         // override to provide some meaningful behavior
     }
 

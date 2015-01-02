@@ -1,6 +1,9 @@
 package pt.isec.amov.petfinder.rest;
 
+import android.util.Log;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.POST;
 
@@ -13,15 +16,22 @@ public class SignUpTask extends WebServiceTask {
 
     protected SignUpTask(final ApiParams apiParams, final Parameters params) {
         super(POST, params.getConnTimeout(), params.getSocketTimeout(), apiParams.getUrl(PATH), params.getBodyRequest());
+        super.execute();
     }
 
     @Override
     protected void onPostExecute(final String response) {
-        // TODO deserialize the response into the following variables
+        String valid = "notok";
         boolean isValid = false;
-
-        // call the task-specific overload
-        this.onPostExecute(isValid);
+        if(!response.contains("Bad Gateway")) {
+            try {
+                JSONObject obj = new JSONObject(response);
+                valid = obj.getString("valid");
+            } catch (JSONException e) {}
+        }
+        if(valid.equals("ok"))
+            isValid = true;
+        this.onPostExecute(true);
     }
 
     public void onPostExecute(final boolean valid) {

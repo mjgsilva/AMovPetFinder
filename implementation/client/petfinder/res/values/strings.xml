@@ -5,4 +5,8 @@
     <string name="start_hintUsername">Username</string>
     <string name="start_hintPassword">Password</string>
     <string name="start_btnSignIn">Sign In</string>
+    <string name="sign_up_hintUsername">Username</string>
+    <string name="sign_up_hintPassword">Password</string>
+    <string name="sign_up_hintPhoneNumber">Phone Number</string>
+    <string name="sign_up_btnSignUp">Sign Up</string>
 </resources>

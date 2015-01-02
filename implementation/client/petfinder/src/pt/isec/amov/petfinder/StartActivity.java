@@ -3,7 +3,6 @@ package pt.isec.amov.petfinder;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -21,14 +20,9 @@ public class StartActivity extends Activity {
      */
 
     PetFinderApp petFinderApp;
-    EditText edtUsername;
-    EditText edtPassword;
+    EditText edtUsername,edtPassword;
     Button btnSignIn;
     TextView txtSignUp;
-
-    private final String baseUrl = "https://mjgsilva.eu/api";
-    private final String clientId = "mcQbcbUdi1dmlzd4fkdlsbMcf";
-    private final String clientSecret = "cYtbFcnbHTdYdCSbAckd68cvgdvbfjc9d7c0dMd2dcbFCebTbS";
 
     private String username, password;
     private final String errSignIn= "Invalid input";
@@ -46,7 +40,7 @@ public class StartActivity extends Activity {
         txtSignUp = (TextView)findViewById(R.id.start_txtSignUp);
 
         if(!petFinderApp.getToken().isTokenExpired()) {
-            launchMainMenu();
+            launchMainActivity();
         }
 
         btnSignIn.setOnClickListener(
@@ -59,15 +53,15 @@ public class StartActivity extends Activity {
                         if(isUsernameEmpty(username) || isPasswordEmpty(password)) {
                             showErrorMessage(errSignIn);
                         } else {
-                            final ApiParams credentials = new ApiParams(baseUrl, clientId, clientSecret);
+                            ApiParams credentials = petFinderApp.getApiParams();
                             final AuthenticateUserTask task = new AuthenticateUserTask(credentials,
                                     new AuthenticateUserTask.Parameters(username, password).setConnTimeout(5000)) {
 
                                 @Override
-                                public void onPostExecute(boolean loginIsValid, String accessToken, String refreshToken, long expiresIn) {
-                                    if(loginIsValid) {
+                                public void onPostExecute(boolean isLoginValid, String accessToken, String refreshToken, long expiresIn) {
+                                    if(isLoginValid) {
                                         setUpNewToken(accessToken,refreshToken,expiresIn);
-                                        launchMainMenu();
+                                        launchMainActivity();
                                     } else {
                                         showErrorMessage(errFromServer);
                                     }
@@ -77,15 +71,29 @@ public class StartActivity extends Activity {
                     }
                 }
         );
+
+        txtSignUp.setOnClickListener(
+                new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        launchSignUpActivity();
+                    }
+                }
+        );
     }
 
     private void showErrorMessage(String errMessage) {
         Toast.makeText(getApplicationContext(), errMessage, Toast.LENGTH_LONG).show();
     }
 
-    private void launchMainMenu() {
+    private void launchMainActivity() {
         Intent intent = new Intent(this,MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    private void launchSignUpActivity() {
+        Intent intent = new Intent(this,SignUpActivity.class);
         startActivity(intent);
     }
 
@@ -101,7 +109,7 @@ public class StartActivity extends Activity {
         return username.trim().equals("");
     }
 
-    private boolean isPasswordEmpty(String username) {
-        return username.trim().equals("");
+    private boolean isPasswordEmpty(String password) {
+        return password.trim().equals("");
     }
 }
