@@ -3,11 +3,34 @@
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
-        >
+              android:gravity="center_vertical|center_horizontal">
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" android:gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:id="@+id/start_llSignInBox">
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/start_edtUsername"
+                android:hint="@string/start_hintUsername"/>
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:ems="10"
+                android:id="@+id/start_edtPassword"
+                android:hint="@string/start_hintPassword"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/start_btnSignIn"
+                android:id="@+id/start_btnSignIn"/>
+    </LinearLayout>
     <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Hello World, StartActivity"
-            />
+            android:text="@string/start_txtSignUp"
+            android:id="@+id/start_txtSignUp" android:gravity="center"/>
 </LinearLayout>
-

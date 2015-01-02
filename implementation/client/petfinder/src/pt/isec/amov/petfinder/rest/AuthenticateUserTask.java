@@ -35,16 +35,26 @@ public class AuthenticateUserTask extends WebServiceTask {
 
     @Override
     protected void onPostExecute(final String response) {
-        // TODO deserialize the response into the following variables
+        boolean loginIsValid = false;
         String accessToken = "";
         String refreshToken = "";
         long expiresIn = 0;
 
+        if(!response.equals("Unauthorized") || !response.contains("Bad Gateway"))
+        {
+            try {
+                JSONObject obj = new JSONObject(response);
+                accessToken = obj.getString("access_token");
+                refreshToken = obj.getString("refresh_token");
+                expiresIn = obj.getLong("expires_in");
+            } catch (JSONException e) {}
+            loginIsValid = true;
+        }
         // call the task-specific overload
-        this.onPostExecute(accessToken, refreshToken, expiresIn);
+        this.onPostExecute(loginIsValid,accessToken, refreshToken, expiresIn);
     }
 
-    public void onPostExecute(final String accessToken, final String refreshToken, final long expiresIn) {
+    public void onPostExecute(final boolean loginIsValid, final String accessToken, final String refreshToken, final long expiresIn) {
         // override to provide some meaningful behavior
     }
 

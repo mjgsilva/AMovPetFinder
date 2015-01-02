@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">PetFinder</string>
+    <string name="start_txtSignUp">Sign Up</string>
+    <string name="start_hintUsername">Username</string>
+    <string name="start_hintPassword">Password</string>
+    <string name="start_btnSignIn">Sign In</string>
 </resources>
