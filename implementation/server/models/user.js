@@ -8,11 +8,11 @@ var userSchema = new mongoose.Schema({
         unique: true,
         required: true
     },
-    email: {
+    /*email: {
         type: String,
         unique: true,
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Invalid email!']
-    },
+    },*/
     password: {
         type: String,
         required: true
