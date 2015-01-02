@@ -1,24 +1,22 @@
 package pt.isec.amov.petfinder.rest;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.List;
 
 /**
  *
@@ -35,6 +33,7 @@ public class WebServiceTask extends AsyncTask<Void, Integer, String> {
 
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String MIME_JSON = "application/json";
+    public static final String ACCEPT = "Accept";
     public static final String AUTH = "Authorization";
     public static final String BEARER = "Bearer";
     public static final String BASIC = "Basic";
@@ -43,15 +42,14 @@ public class WebServiceTask extends AsyncTask<Void, Integer, String> {
     private final int connTimeout;
     private final int socketTimeout;
     private final String url;
+    private final JSONObject requestBody;
 
-    private List<? extends NameValuePair> params;
-
-    protected WebServiceTask(final TaskType taskType, final int connTimeout, final int socketTimeout, final String url, final List<? extends NameValuePair> params) {
+    protected WebServiceTask(final TaskType taskType, final int connTimeout, final int socketTimeout, final String url, final JSONObject requestBody) {
         // TODO add null checks
         this.taskType = taskType;
         this.connTimeout = connTimeout;
         this.socketTimeout = socketTimeout;
-        this.params = params;
+        this.requestBody = requestBody;
         this.url = url;
     }
 
@@ -77,7 +75,6 @@ public class WebServiceTask extends AsyncTask<Void, Integer, String> {
             }
 
         }
-
         return result;
     }
 
@@ -124,10 +121,12 @@ public class WebServiceTask extends AsyncTask<Void, Integer, String> {
 
                 case POST:
                     HttpPost httpPost = new HttpPost(url);
+                    httpPost.addHeader(ACCEPT, MIME_JSON);
                     httpPost.addHeader(CONTENT_TYPE, MIME_JSON);
                     configureRequest(httpPost);
 
-                    httpPost.setEntity(new UrlEncodedFormEntity(params));
+                    StringEntity se = new StringEntity(requestBody.toString());
+                    httpPost.setEntity(se);
 
                     response = httpclient.execute(httpPost);
                     break;

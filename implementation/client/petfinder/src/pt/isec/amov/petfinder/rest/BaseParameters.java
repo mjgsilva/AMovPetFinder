@@ -1,6 +1,7 @@
 package pt.isec.amov.petfinder.rest;
 
 import org.apache.http.NameValuePair;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,7 +14,7 @@ public abstract class BaseParameters<T extends BaseParameters> {
 
     private int connTimeout = WebServiceTask.CONN_TIMEOUT;
     private int socketTimeout = WebServiceTask.SOCKET_TIMEOUT;
-    protected List<NameValuePair> params = new ArrayList<NameValuePair>();
+    protected JSONObject requestBody = new JSONObject();
 
     public int getConnTimeout() {
         return connTimeout;
@@ -35,7 +36,5 @@ public abstract class BaseParameters<T extends BaseParameters> {
         return (T) this;
     }
 
-    public List<NameValuePair> getParams() {
-        return Collections.unmodifiableList(params);
-    }
+    public JSONObject getBodyRequest() { return requestBody; }
 }
