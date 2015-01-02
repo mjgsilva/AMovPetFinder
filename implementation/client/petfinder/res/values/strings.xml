@@ -9,4 +9,6 @@
     <string name="sign_up_hintPassword">Password</string>
     <string name="sign_up_hintPhoneNumber">Phone Number</string>
     <string name="sign_up_btnSignUp">Sign Up</string>
+    <string name="main_txtCreate">Create Post</string>
+    <string name="main_txtMyPosts">My Posts</string>
 </resources>
