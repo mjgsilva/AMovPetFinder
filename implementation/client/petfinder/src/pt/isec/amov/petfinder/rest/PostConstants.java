@@ -17,6 +17,8 @@ public interface PostConstants {
         public static final String COLOR = "color";
         public static final String IMAGES = "images";
         public static final String LOCATION = "location";
+        public static final String LATITUDE = "lat";
+        public static final String LONGITUDE = "long";
         public static final String PUBDATE = "publicationDate";
     }
 

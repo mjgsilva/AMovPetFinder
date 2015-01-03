@@ -16,6 +16,8 @@ public class Post {
     private int userId;
     private PostType type;
     private Metadata metadata = new Metadata();
+    private List<byte[]> images = new ArrayList<byte[]>();
+    private Location location;
 
     public int getPostId() {
         return postId;
@@ -41,6 +43,18 @@ public class Post {
         this.type = type;
     }
 
+    public List<byte[]> getImages() {
+        return images;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(final Location location) {
+        this.location = location;
+    }
+
     public Metadata getMetadata() {
         return metadata;
     }
@@ -49,8 +63,6 @@ public class Post {
         private AnimalSpecie specie;
         private AnimalSize size;
         private final EnumSet<AnimalColor> colors = EnumSet.noneOf(AnimalColor.class);
-        private List<byte[]> images = new ArrayList<byte[]>();
-        private Location location;
         private Date publicationDate;
 
         public AnimalSpecie getSpecie() {
@@ -72,18 +84,6 @@ public class Post {
 
         public EnumSet<AnimalColor> getColors() {
             return colors;
-        }
-
-        public List<byte[]> getImages() {
-            return images;
-        }
-
-        public Location getLocation() {
-            return location;
-        }
-
-        public void setLocation(final Location location) {
-            this.location = location;
         }
 
         public Date getPublicationDate() {
