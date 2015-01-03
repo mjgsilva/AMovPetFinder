@@ -27,17 +27,15 @@ public class PostJsonHelper {
         final Metadata meta = post.getMetadata();
 
         return new JSONObject()
-            .put(POST_ID, post.getPostId())
-            .put(USER_ID, post.getUserId())
             .put(TYPE, post.getType().getValue())
+            .put(LATITUDE, post.getLocation().getLatitute())
+            .put(LONGITUDE, post.getLocation().getLongitude())
+            .put(IMAGES, imagesToJsonArray(post.getImages()))
             .put(METADATA,
                     new JSONObject()
                             .put(SPECIE, meta.getSpecie().getValue())
                             .put(SIZE, meta.getSize().getValue())
                             .put(COLOR, colorsToJsonArray(meta.getColors()))
-                            .put(IMAGES, imagesToJsonArray(meta.getImages()))
-                            .put(LOCATION, locationToJsonArray(meta.getLocation()))
-                            .put(PUBDATE, JsonTimeUtils.toString(meta.getPublicationDate()))
             );
     }
 
@@ -59,16 +57,16 @@ public class PostJsonHelper {
         final Post post = new Post();
 
         post.setPostId(json.getInt(POST_ID));
-        post.setUserId(json.getInt(USER_ID));
         post.setType(PostType.fromValue(json.getString(TYPE)));
+        post.getImages().addAll(imagesFromJsonArray(json.getJSONArray(IMAGES)));
+        post.setLocation(locationFromJsonArray(json.getJSONArray(LOCATION)));
 
         final Metadata metadata = post.getMetadata();
         final JSONObject meta = json.getJSONObject(METADATA);
         metadata.setSpecie(AnimalSpecie.fromValue(meta.getString(SPECIE)));
         metadata.setSize(AnimalSize.fromValue(meta.getString(SIZE)));
         metadata.getColors().addAll(colorsFromJsonArray(meta.getJSONArray(COLOR)));
-        metadata.getImages().addAll(imagesFromJsonArray(meta.getJSONArray(IMAGES)));
-        metadata.setLocation(locationFromJsonArray(meta.getJSONArray(LOCATION)));
+
         try {
             metadata.setPublicationDate(JsonTimeUtils.fromString(meta.getString(PUBDATE)));
         } catch (final ParseException e) {
@@ -127,9 +125,4 @@ public class PostJsonHelper {
 
         return new Location(json.getDouble(0), json.getDouble(1));
     }
-
-    static JSONArray locationToJsonArray(final Location location) throws JSONException {
-        return new JSONArray().put(location.getLatitute()).put(location.getLongitude());
-    }
-
 }

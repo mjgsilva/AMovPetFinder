@@ -26,8 +26,6 @@ import static pt.isec.amov.petfinder.rest.PostConstants.Metadata.*;
 public class PostJsonHelperTest extends TestCase {
 
     public void testToJson() throws JSONException {
-        final int postId = 1;
-        final int userId = 2;
         final PostType type = FOUND;
         final AnimalSpecie specie = CAT;
         final AnimalColor color = BLACK;
@@ -41,23 +39,23 @@ public class PostJsonHelperTest extends TestCase {
         final String serializedDate = JsonTimeUtils.toString(date);
 
         final Post post = new Post();
-        post.setPostId(postId);
-        post.setUserId(userId);
         post.setType(type);
+        post.getImages().add(image);
+        post.setLocation(location);
 
         final Metadata meta = post.getMetadata();
         meta.setSpecie(specie);
         meta.setSize(size);
         meta.getColors().add(color);
-        meta.getImages().add(image);
-        meta.setLocation(location);
-        meta.setPublicationDate(date);
+
 
         final JSONObject json = PostJsonHelper.toJSON(post);
 
-        assertEquals(postId, json.getInt(POST_ID));
-        assertEquals(userId, json.getInt(USER_ID));
         assertEquals(type.getValue(), json.getString(TYPE));
+
+        final JSONArray imagesJson = json.getJSONArray(IMAGES);
+        assertEquals(1, imagesJson.length());
+        assertEquals(encodedImage, imagesJson.getString(0));
 
         final JSONObject metaJson = json.getJSONObject(METADATA);
         assertEquals(specie.getValue(), metaJson.getString(SPECIE));
@@ -67,21 +65,13 @@ public class PostJsonHelperTest extends TestCase {
         assertEquals(1, colorJson.length());
         assertEquals(color.getValue(), colorJson.getString(0));
 
-        final JSONArray imagesJson = metaJson.getJSONArray(IMAGES);
-        assertEquals(1, imagesJson.length());
-        assertEquals(encodedImage, imagesJson.getString(0));
-
-        final JSONArray locationJson = metaJson.getJSONArray(LOCATION);
-        assertEquals(2, locationJson.length());
-        assertEquals(latitude, locationJson.getDouble(0));
-        assertEquals(longitude, locationJson.getDouble(1));
-
+        /* Server defines the publication date
         assertEquals(serializedDate, metaJson.getString(PUBDATE));
+         */
     }
 
     public void testFromJson() throws JSONException {
         final int postId = 1;
-        final int userId = 2;
         final PostType type = FOUND;
         final AnimalSpecie specie = CAT;
         final AnimalColor color = BLACK;
@@ -96,21 +86,19 @@ public class PostJsonHelperTest extends TestCase {
 
         final JSONObject json = new JSONObject()
                 .put(POST_ID, postId)
-                .put(USER_ID, userId)
                 .put(TYPE, type.getValue())
+                .put(IMAGES, new JSONArray().put(encodedImage))
+                .put(LOCATION, new JSONArray().put(latitude).put(longitude))
                 .put(METADATA,
                         new JSONObject()
                                 .put(SPECIE, specie.getValue())
                                 .put(SIZE, size.getValue())
                                 .put(COLOR, new JSONArray().put(color))
-                                .put(IMAGES, new JSONArray().put(encodedImage))
-                                .put(LOCATION, new JSONArray().put(latitude).put(longitude))
                                 .put(PUBDATE, serializedDate));
 
         final Post post = PostJsonHelper.fromJSON(json);
 
         assertEquals(postId, post.getPostId());
-        assertEquals(userId, post.getUserId());
         assertEquals(type, post.getType());
 
         final Metadata meta = post.getMetadata();
@@ -121,11 +109,11 @@ public class PostJsonHelperTest extends TestCase {
         assertEquals(1, postColors.size());
         assertTrue(postColors.contains(color));
 
-        final List<byte[]> postImages = meta.getImages();
+        final List<byte[]> postImages = post.getImages();
         assertEquals(1, postImages.size());
         assertTrue(Arrays.equals(image, postImages.get(0)));
 
-        final Location postLocation = meta.getLocation();
+        final Location postLocation = post.getLocation();
         assertEquals(latitude, postLocation.getLatitute());
         assertEquals(longitude, postLocation.getLongitude());
 
@@ -149,15 +137,14 @@ public class PostJsonHelperTest extends TestCase {
 
         final JSONArray json = new JSONArray().put(new JSONObject()
                 .put(POST_ID, postId)
-                .put(USER_ID, userId)
                 .put(TYPE, type.getValue())
+                .put(IMAGES, new JSONArray().put(encodedImage))
+                .put(LOCATION, new JSONArray().put(latitude).put(longitude))
                 .put(METADATA,
                         new JSONObject()
                                 .put(SPECIE, specie.getValue())
                                 .put(SIZE, size.getValue())
                                 .put(COLOR, new JSONArray().put(color))
-                                .put(IMAGES, new JSONArray().put(encodedImage))
-                                .put(LOCATION, new JSONArray().put(latitude).put(longitude))
                                 .put(PUBDATE, serializedDate)));
 
         final List<Post> posts = PostJsonHelper.fromJson(json);
@@ -227,6 +214,8 @@ public class PostJsonHelperTest extends TestCase {
         assertEquals(longitude, location.getLongitude());
     }
 
+    /* During the adjustment in order to match the API implementation,
+    sending a post should pass lat and lng as request params
     public void testLocationToJsonArray() throws JSONException {
         final double latitude = 40.1938516;
         final double longitude = -8.4098084;
@@ -236,8 +225,6 @@ public class PostJsonHelperTest extends TestCase {
 
         assertEquals(latitude, array.get(0));
         assertEquals(longitude, array.get(1));
-    }
-
-
+    } */
 
 }
