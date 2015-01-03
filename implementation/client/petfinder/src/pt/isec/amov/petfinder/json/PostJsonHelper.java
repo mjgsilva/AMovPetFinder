@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import pt.isec.amov.petfinder.Validation;
 import pt.isec.amov.petfinder.core.*;
 import pt.isec.amov.petfinder.entities.Post;
+import pt.isec.amov.petfinder.entities.Post.Metadata;
 
 import java.text.ParseException;
 import java.util.*;
@@ -23,7 +24,7 @@ public class PostJsonHelper {
     public static JSONObject toJSON(final Post post) throws JSONException {
         Validation.assertNotNull(post, "The post cannot be null");
 
-        final Post.Metadata meta = post.getMetadata();
+        final Metadata meta = post.getMetadata();
 
         return new JSONObject()
             .put(POST_ID, post.getPostId())
@@ -61,22 +62,20 @@ public class PostJsonHelper {
         post.setUserId(json.getInt(USER_ID));
         post.setType(PostType.fromValue(json.getString(TYPE)));
 
-        final Post.Metadata metadata = new Post.Metadata();
+        final Metadata metadata = post.getMetadata();
         final JSONObject meta = json.getJSONObject(METADATA);
-        metadata.setSpecie(Specie.fromValue(meta.getString(SPECIE)));
+        metadata.setSpecie(AnimalSpecie.fromValue(meta.getString(SPECIE)));
         metadata.setSize(AnimalSize.fromValue(meta.getString(SIZE)));
         metadata.getColors().addAll(colorsFromJsonArray(meta.getJSONArray(COLOR)));
         metadata.getImages().addAll(imagesFromJsonArray(meta.getJSONArray(IMAGES)));
-        metadata.setLocation(locationFromJsonArray(json.getJSONArray(LOCATION)));
+        metadata.setLocation(locationFromJsonArray(meta.getJSONArray(LOCATION)));
         try {
-            metadata.setPublicationDate(JsonTimeUtils.fromString(json.getString(PUBDATE)));
+            metadata.setPublicationDate(JsonTimeUtils.fromString(meta.getString(PUBDATE)));
         } catch (final ParseException e) {
             // We don't want to pollute the interface with a ParseException just because we chose to use
             // Java's SimpleDateFormat to parse the dates. Wrap it in a JSONException
             throw new JSONException("Cannot parse the publication date");
         }
-
-        post.setMetadata(metadata);
 
         return post;
     }

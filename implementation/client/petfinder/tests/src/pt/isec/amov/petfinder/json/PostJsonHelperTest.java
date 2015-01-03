@@ -4,18 +4,168 @@ import android.util.Base64;
 import junit.framework.TestCase;
 import org.json.JSONArray;
 import org.json.JSONException;
-import pt.isec.amov.petfinder.core.AnimalColor;
-import pt.isec.amov.petfinder.core.Location;
+import org.json.JSONObject;
+import pt.isec.amov.petfinder.core.*;
+import pt.isec.amov.petfinder.entities.Post;
+import pt.isec.amov.petfinder.entities.Post.Metadata;
 
 import java.util.*;
 
+import static android.util.Base64.NO_WRAP;
 import static pt.isec.amov.petfinder.core.AnimalColor.BLACK;
 import static pt.isec.amov.petfinder.core.AnimalColor.WHITE;
+import static pt.isec.amov.petfinder.core.AnimalSize.MEDIUM;
+import static pt.isec.amov.petfinder.core.AnimalSpecie.CAT;
+import static pt.isec.amov.petfinder.core.PostType.FOUND;
+import static pt.isec.amov.petfinder.rest.PostConstants.*;
+import static pt.isec.amov.petfinder.rest.PostConstants.Metadata.*;
 
 /**
- * Created by mgois on 03-01-2015.
+ *
  */
 public class PostJsonHelperTest extends TestCase {
+
+    public void testToJson() throws JSONException {
+        final int postId = 1;
+        final int userId = 2;
+        final PostType type = FOUND;
+        final AnimalSpecie specie = CAT;
+        final AnimalColor color = BLACK;
+        final AnimalSize size = MEDIUM;
+        final byte[] image = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06 };
+        final String encodedImage = Base64.encodeToString(image, NO_WRAP);
+        final double latitude = 40.1938516;
+        final double longitude = -8.4098084;
+        final Location location = new Location(latitude, longitude);
+        final Date date = new Date();
+        final String serializedDate = JsonTimeUtils.toString(date);
+
+        final Post post = new Post();
+        post.setPostId(postId);
+        post.setUserId(userId);
+        post.setType(type);
+
+        final Metadata meta = post.getMetadata();
+        meta.setSpecie(specie);
+        meta.setSize(size);
+        meta.getColors().add(color);
+        meta.getImages().add(image);
+        meta.setLocation(location);
+        meta.setPublicationDate(date);
+
+        final JSONObject json = PostJsonHelper.toJSON(post);
+
+        assertEquals(postId, json.getInt(POST_ID));
+        assertEquals(userId, json.getInt(USER_ID));
+        assertEquals(type.getValue(), json.getString(TYPE));
+
+        final JSONObject metaJson = json.getJSONObject(METADATA);
+        assertEquals(specie.getValue(), metaJson.getString(SPECIE));
+        assertEquals(size.getValue(), metaJson.getString(SIZE));
+
+        final JSONArray colorJson = metaJson.getJSONArray(COLOR);
+        assertEquals(1, colorJson.length());
+        assertEquals(color.getValue(), colorJson.getString(0));
+
+        final JSONArray imagesJson = metaJson.getJSONArray(IMAGES);
+        assertEquals(1, imagesJson.length());
+        assertEquals(encodedImage, imagesJson.getString(0));
+
+        final JSONArray locationJson = metaJson.getJSONArray(LOCATION);
+        assertEquals(2, locationJson.length());
+        assertEquals(latitude, locationJson.getDouble(0));
+        assertEquals(longitude, locationJson.getDouble(1));
+
+        assertEquals(serializedDate, metaJson.getString(PUBDATE));
+    }
+
+    public void testFromJson() throws JSONException {
+        final int postId = 1;
+        final int userId = 2;
+        final PostType type = FOUND;
+        final AnimalSpecie specie = CAT;
+        final AnimalColor color = BLACK;
+        final AnimalSize size = MEDIUM;
+        final byte[] image = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06 };
+        final String encodedImage = Base64.encodeToString(image, NO_WRAP);
+        final double latitude = 40.1938516;
+        final double longitude = -8.4098084;
+        final Location location = new Location(latitude, longitude);
+        final Date date = new Date();
+        final String serializedDate = JsonTimeUtils.toString(date);
+
+        final JSONObject json = new JSONObject()
+                .put(POST_ID, postId)
+                .put(USER_ID, userId)
+                .put(TYPE, type.getValue())
+                .put(METADATA,
+                        new JSONObject()
+                                .put(SPECIE, specie.getValue())
+                                .put(SIZE, size.getValue())
+                                .put(COLOR, new JSONArray().put(color))
+                                .put(IMAGES, new JSONArray().put(encodedImage))
+                                .put(LOCATION, new JSONArray().put(latitude).put(longitude))
+                                .put(PUBDATE, serializedDate));
+
+        final Post post = PostJsonHelper.fromJSON(json);
+
+        assertEquals(postId, post.getPostId());
+        assertEquals(userId, post.getUserId());
+        assertEquals(type, post.getType());
+
+        final Metadata meta = post.getMetadata();
+        assertEquals(specie, meta.getSpecie());
+        assertEquals(size, meta.getSize());
+
+        final Set<AnimalColor> postColors = meta.getColors();
+        assertEquals(1, postColors.size());
+        assertTrue(postColors.contains(color));
+
+        final List<byte[]> postImages = meta.getImages();
+        assertEquals(1, postImages.size());
+        assertTrue(Arrays.equals(image, postImages.get(0)));
+
+        final Location postLocation = meta.getLocation();
+        assertEquals(latitude, postLocation.getLatitute());
+        assertEquals(longitude, postLocation.getLongitude());
+
+        assertEquals(date, meta.getPublicationDate());
+    }
+
+    public void testFromJsonArray() throws JSONException {
+        final int postId = 1;
+        final int userId = 2;
+        final PostType type = FOUND;
+        final AnimalSpecie specie = CAT;
+        final AnimalColor color = BLACK;
+        final AnimalSize size = MEDIUM;
+        final byte[] image = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06 };
+        final String encodedImage = Base64.encodeToString(image, NO_WRAP);
+        final double latitude = 40.1938516;
+        final double longitude = -8.4098084;
+        final Location location = new Location(latitude, longitude);
+        final Date date = new Date();
+        final String serializedDate = JsonTimeUtils.toString(date);
+
+        final JSONArray json = new JSONArray().put(new JSONObject()
+                .put(POST_ID, postId)
+                .put(USER_ID, userId)
+                .put(TYPE, type.getValue())
+                .put(METADATA,
+                        new JSONObject()
+                                .put(SPECIE, specie.getValue())
+                                .put(SIZE, size.getValue())
+                                .put(COLOR, new JSONArray().put(color))
+                                .put(IMAGES, new JSONArray().put(encodedImage))
+                                .put(LOCATION, new JSONArray().put(latitude).put(longitude))
+                                .put(PUBDATE, serializedDate)));
+
+        final List<Post> posts = PostJsonHelper.fromJson(json);
+
+        assertEquals(1, posts.size());
+        assertEquals(postId, posts.get(0).getPostId());
+        // Reasonably assume that the rest is ok
+    }
 
     public void testColorsFromJsonArray() throws JSONException {
         final JSONArray array = new JSONArray().put("black").put("white");
@@ -45,7 +195,7 @@ public class PostJsonHelperTest extends TestCase {
 
     public void testImagesFromJsonArray() throws JSONException {
         final byte[] image = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06 };
-        final String encoded = Base64.encodeToString(image, Base64.NO_WRAP);
+        final String encoded = Base64.encodeToString(image, NO_WRAP);
         final JSONArray array = new JSONArray().put(encoded);
 
         final List<byte[]> images = PostJsonHelper.imagesFromJsonArray(array);
@@ -56,7 +206,7 @@ public class PostJsonHelperTest extends TestCase {
 
     public void testImagesToJsonArray() throws JSONException {
         final byte[] image = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06 };
-        final String encoded = Base64.encodeToString(image, Base64.NO_WRAP);
+        final String encoded = Base64.encodeToString(image, NO_WRAP);
         final List<byte[]> images = new ArrayList<byte[]>(1);
         images.add(image);
 

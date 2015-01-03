@@ -6,7 +6,7 @@ import org.apache.http.message.BasicNameValuePair;
 import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.POST;
 
 /**
- * Created by mario on 31/12/14.
+ *
  */
 public class CreatePostTask extends WebServiceTask {
 

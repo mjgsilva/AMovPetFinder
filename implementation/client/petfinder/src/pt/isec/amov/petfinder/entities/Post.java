@@ -15,7 +15,7 @@ public class Post {
     private int postId;
     private int userId;
     private PostType type;
-    private Metadata metadata;
+    private Metadata metadata = new Metadata();
 
     public int getPostId() {
         return postId;
@@ -45,23 +45,19 @@ public class Post {
         return metadata;
     }
 
-    public void setMetadata(Metadata metadata) {
-        this.metadata = metadata;
-    }
-
     public static class Metadata {
-        private Specie specie;
+        private AnimalSpecie specie;
         private AnimalSize size;
         private final EnumSet<AnimalColor> colors = EnumSet.noneOf(AnimalColor.class);
         private List<byte[]> images = new ArrayList<byte[]>();
         private Location location;
         private Date publicationDate;
 
-        public Specie getSpecie() {
+        public AnimalSpecie getSpecie() {
             return specie;
         }
 
-        public void setSpecie(final Specie specie) {
+        public void setSpecie(final AnimalSpecie specie) {
             this.specie = specie;
         }
 

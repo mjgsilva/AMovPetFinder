@@ -1,16 +1,16 @@
 package pt.isec.amov.petfinder.core;
 
 /**
- * Created by mgois on 02-01-2015.
+ *
  */
-public enum Specie {
+public enum AnimalSpecie {
     DOG("dog"),
     CAT("cat"),
     OTHER("other");
 
     private final String value;
 
-    private Specie(final String value) {
+    private AnimalSpecie(final String value) {
         this.value = value;
     }
 
@@ -18,7 +18,7 @@ public enum Specie {
         return value;
     }
 
-    public static Specie fromValue(final String value) {
+    public static AnimalSpecie fromValue(final String value) {
         final String clean = value.toLowerCase().trim();
 
         if (clean.equals(DOG.getValue())) {
