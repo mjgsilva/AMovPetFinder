@@ -1,9 +1,10 @@
 package pt.isec.amov.petfinder.rest;
 
-import android.util.Log;
+import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.JSONTokener;
 import pt.isec.amov.petfinder.entities.Post;
+import pt.isec.amov.petfinder.json.PostJsonHelper;
 
 import java.util.List;
 
@@ -24,14 +25,15 @@ public class MyPostsTask extends WebServiceTask {
     @Override
     protected void onPostExecute(final String response) {
         try {
-            JSONObject json = new JSONObject(response);
+            final JSONArray json = new JSONArray(new JSONTokener(response));
+            final List<Post> posts = PostJsonHelper.fromJson(json);
 
+            onPostExecute(posts);
         } catch (JSONException e) {
-            Log.w(LOG_TAG, "An error occurred ");
+            e.printStackTrace();
         }
     }
 
     public void onPostExecute(final List<Post> posts) {
-
     }
 }
