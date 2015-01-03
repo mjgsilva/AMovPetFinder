@@ -9,11 +9,15 @@ public interface PostConstants {
     public static final String USER_ID = "userId";
     public static final String TYPE = "type";
 
-    public static final String MD_SPECIE = "specie";
-    public static final String MD_SIZE = "size";
-    public static final String MD_COLOR = "color";
-    public static final String MD_IMAGES = "images";
-    public static final String MD_LOCATION = "location";
-    public static final String MD_PUBDATE = "publicationDate";
+    public static final String METADATA = "metadata";
+
+    public interface Metadata {
+        public static final String SPECIE = "specie";
+        public static final String SIZE = "size";
+        public static final String COLOR = "color";
+        public static final String IMAGES = "images";
+        public static final String LOCATION = "location";
+        public static final String PUBDATE = "publicationDate";
+    }
 
 }

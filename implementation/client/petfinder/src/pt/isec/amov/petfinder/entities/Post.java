@@ -1,11 +1,12 @@
 package pt.isec.amov.petfinder.entities;
 
-import com.google.android.gms.maps.model.LatLng;
 import pt.isec.amov.petfinder.Validation;
 import pt.isec.amov.petfinder.core.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
+import java.util.List;
 
 /**
  *
@@ -52,7 +53,7 @@ public class Post {
         private Specie specie;
         private AnimalSize size;
         private final EnumSet<AnimalColor> colors = EnumSet.noneOf(AnimalColor.class);
-        private byte[] image;
+        private List<byte[]> images = new ArrayList<byte[]>();
         private Location location;
         private Date publicationDate;
 
@@ -77,12 +78,8 @@ public class Post {
             return colors;
         }
 
-        public byte[] getImage() {
-            return image;
-        }
-
-        public void setImage(final byte[] image) {
-            this.image = image;
+        public List<byte[]> getImages() {
+            return images;
         }
 
         public Location getLocation() {
