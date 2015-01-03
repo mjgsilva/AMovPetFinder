@@ -1,7 +1,7 @@
 package pt.isec.amov.petfinder.core;
 
 /**
- * 
+ *
  */
 public class Location {
     private final double latitute;

@@ -11,4 +11,16 @@
     <string name="sign_up_btnSignUp">Sign Up</string>
     <string name="main_txtCreate">Create Post</string>
     <string name="main_txtMyPosts">My Posts</string>
+    <string name="post_description">%1$s de porte %2$s e cor %3$s</string>
+    <string name="specie_dog">cão</string>
+    <string name="specie_cat">gato</string>
+    <string name="specie_other">outro</string>
+    <string name="size_small">pequeno</string>
+    <string name="size_medium">médio</string>
+    <string name="size_large">grande</string>
+    <string name="color_black">preto</string>
+    <string name="color_white">branco</string>
+    <string name="color_brown">castanho</string>
+    <string name="color_grey">grey</string>
+    <string name="color_yellow">amarelo</string>
 </resources>
