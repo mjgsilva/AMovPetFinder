@@ -19,4 +19,22 @@ public enum AnimalColor {
     public String getValue() {
         return value;
     }
+
+    public static AnimalColor fromValue(final String value) {
+        final String clean = value.toLowerCase().trim();
+
+        if (clean.equals(WHITE.getValue())) {
+            return WHITE;
+        } else if (clean.equals(BLACK.getValue())) {
+            return BLACK;
+        } else if (clean.equals(BROWN.getValue())) {
+            return BROWN;
+        } else if (clean.equals(GREY.getValue())) {
+            return GREY;
+        } else if (clean.equals(YELLOW.getValue())) {
+            return YELLOW;
+        } else {
+            throw new IllegalArgumentException("The value " + value + " is invalid");
+        }
+    }
 }

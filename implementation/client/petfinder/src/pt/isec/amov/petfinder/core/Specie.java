@@ -17,4 +17,16 @@ public enum Specie {
     public String getValue() {
         return value;
     }
+
+    public static Specie fromValue(final String value) {
+        final String clean = value.toLowerCase().trim();
+
+        if (clean.equals(DOG.getValue())) {
+            return DOG;
+        } else if (clean.equals(CAT.getValue())) {
+            return CAT;
+        } else {
+            throw new IllegalArgumentException("The value " + value + " is invalid");
+        }
+    }
 }

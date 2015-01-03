@@ -16,4 +16,16 @@ public enum PostType {
     public String getValue() {
         return value;
     }
+
+    public static PostType fromValue(final String value) {
+        final String clean = value.toLowerCase().trim();
+
+        if (clean.equals(LOST.getValue())) {
+            return LOST;
+        } else if (clean.equals(FOUND.getValue())) {
+            return FOUND;
+        } else {
+            throw new IllegalArgumentException("The value " + value + " is invalid");
+        }
+    }
 }

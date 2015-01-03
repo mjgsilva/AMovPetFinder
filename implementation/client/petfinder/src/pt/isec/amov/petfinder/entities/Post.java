@@ -2,15 +2,10 @@ package pt.isec.amov.petfinder.entities;
 
 import com.google.android.gms.maps.model.LatLng;
 import pt.isec.amov.petfinder.Validation;
-import pt.isec.amov.petfinder.core.AnimalColor;
-import pt.isec.amov.petfinder.core.AnimalSize;
-import pt.isec.amov.petfinder.core.PostType;
-import pt.isec.amov.petfinder.core.Specie;
+import pt.isec.amov.petfinder.core.*;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
-import java.util.List;
 
 /**
  *
@@ -53,19 +48,19 @@ public class Post {
         this.metadata = metadata;
     }
 
-    public class Metadata {
+    public static class Metadata {
         private Specie specie;
         private AnimalSize size;
         private final EnumSet<AnimalColor> colors = EnumSet.noneOf(AnimalColor.class);
-        private final List<Byte[]> images = new ArrayList<Byte[]>();
-        private LatLng location;
+        private byte[] image;
+        private Location location;
         private Date publicationDate;
 
         public Specie getSpecie() {
             return specie;
         }
 
-        public void setSpecie(Specie specie) {
+        public void setSpecie(final Specie specie) {
             this.specie = specie;
         }
 
@@ -82,15 +77,19 @@ public class Post {
             return colors;
         }
 
-        public List<Byte[]> getImages() {
-            return images;
+        public byte[] getImage() {
+            return image;
         }
 
-        public LatLng getLocation() {
+        public void setImage(final byte[] image) {
+            this.image = image;
+        }
+
+        public Location getLocation() {
             return location;
         }
 
-        public void setLocation(LatLng location) {
+        public void setLocation(final Location location) {
             this.location = location;
         }
 
@@ -98,7 +97,7 @@ public class Post {
             return publicationDate;
         }
 
-        public void setPublicationDate(Date publicationDate) {
+        public void setPublicationDate(final Date publicationDate) {
             this.publicationDate = publicationDate;
         }
     }

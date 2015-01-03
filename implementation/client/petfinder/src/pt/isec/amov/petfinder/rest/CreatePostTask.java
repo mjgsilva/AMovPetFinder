@@ -39,6 +39,7 @@ public class CreatePostTask extends WebServiceTask {
 
     public static class Parameters extends BaseParameters<Parameters> {
 
+        // TODO deprecate these constants and user the ones in the interface PostConstants?
         public static final String POST_TYPE = "type";
         public static final String LATITUDE = "lat";
         public static final String LONGITUDE = "long";
