@@ -21,5 +21,6 @@
         <activity android:name=".SelectPostLocationActivity" />
         <activity android:name=".MatchingPostsActivity" />
         <activity android:name=".MatchingPostDetailsActivity" />
+        <activity android:name=".MyPostActivity"/>
     </application>
 </manifest>

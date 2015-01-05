@@ -12,16 +12,13 @@ public class CreatePostTask extends WebServiceTask {
 
     private static final String PATH = "/post";
 
-    private final String token;
-
-    protected CreatePostTask(final ApiParams apiParams, final String token, final GetPostsAdvancedTask.Parameters params) {
+    public CreatePostTask(final ApiParams apiParams, final GetPostsAdvancedTask.Parameters params) {
         super(POST, params.getConnTimeout(), params.getSocketTimeout(), apiParams.getUrl(PATH), params.getBodyRequest());
-        this.token = token;
     }
 
     @Override
     protected void configureRequest(final HttpPost post) {
-        post.addHeader(AUTH, BEARER + " " + token);
+        post.addHeader(AUTH, BEARER + " ");
     }
 
     @Override

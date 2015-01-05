@@ -1,10 +1,7 @@
 package pt.isec.amov.petfinder.rest;
 
-import android.content.Context;
 import android.util.Base64;
-import android.util.Log;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 

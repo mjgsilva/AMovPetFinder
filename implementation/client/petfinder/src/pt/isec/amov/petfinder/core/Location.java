@@ -1,9 +1,11 @@
 package pt.isec.amov.petfinder.core;
 
+import java.io.Serializable;
+
 /**
  *
  */
-public class Location {
+public class Location implements Serializable {
     private final double latitute;
     private final double longitude;
 

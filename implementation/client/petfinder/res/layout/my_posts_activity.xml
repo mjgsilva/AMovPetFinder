@@ -4,11 +4,8 @@
               android:orientation="vertical"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <fragment
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="pt.isec.amov.petfinder.PostListFragment"
+    <FrameLayout
         android:id="@+id/myPosts_frgPosts"
-        android:layout_gravity="center_horizontal"
-        tools:layout="@layout/post_list_fragment"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>

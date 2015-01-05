@@ -1,7 +1,7 @@
 package pt.isec.amov.petfinder.rest;
 
-import android.graphics.Color;
-import com.google.android.gms.maps.model.LatLng;
+import pt.isec.amov.petfinder.core.AnimalColor;
+import pt.isec.amov.petfinder.core.Location;
 import pt.isec.amov.petfinder.entities.Post;
 
 import java.util.Date;
@@ -35,21 +35,19 @@ public class GetPostsAdvancedTask extends WebServiceTask {
 
     public static class Parameters extends BaseParameters<Parameters> {
 
-        public static final String POST_ID = "postId"; // required
+        // TODO Deprecate this constants
         public static final String POST_TYPE = "type"; //required
         public static final String GEOLOCATION = "location"; //required
         public static final String SPECIE = "specie"; // required
         public static final String SIZE = "size";
         public static final String COLOR = "color";
-        public static final String OBSERVATIONS = "obs";
         public static final String POST_DATE = "publicationDate";
 
         // TODO consider a proper type for species?
-        public Parameters(final int postId, final int postType, final LatLng latLng, final String specie) {
+        public Parameters(final int postType, final Location location, final String specie) {
             // TODO validate null
-            insertPair(POST_ID, String.valueOf(postId));
             insertPair(POST_TYPE, String.valueOf(postType));
-            insertPair(GEOLOCATION, latLng.toString()); // TODO serialize properly [lat,lng]
+            insertPair(GEOLOCATION, location.toString()); // TODO serialize properly [lat,lng]
             insertPair(SPECIE, specie);
         }
 
@@ -61,14 +59,8 @@ public class GetPostsAdvancedTask extends WebServiceTask {
         }
 
         // TODO multiple colors? Is this the correct type?
-        public Parameters color(final Color color) {
+        public Parameters color(final AnimalColor color) {
             insertPair(COLOR, color.toString()); // TODO serialize properly
-
-            return this;
-        }
-
-        public Parameters observation(final String observation) {
-            insertPair(OBSERVATIONS, observation); // TODO serialize properly
 
             return this;
         }

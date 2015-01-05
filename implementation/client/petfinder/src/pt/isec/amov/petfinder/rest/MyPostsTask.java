@@ -1,5 +1,6 @@
 package pt.isec.amov.petfinder.rest;
 
+import org.apache.http.client.methods.HttpGet;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONTokener;
@@ -16,10 +17,17 @@ import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.GET;
 public class MyPostsTask extends WebServiceTask {
 
     private static final String PATH = "/myPosts";
-    private static final String LOG_TAG = "API";
 
-    protected MyPostsTask(final ApiParams apiParams, final String token, final GetPostsAdvancedTask.Parameters params) {
+    private final String token;
+
+    public MyPostsTask(final ApiParams apiParams, final String token, final Parameters params) {
         super(GET, params.getConnTimeout(), params.getSocketTimeout(), apiParams.getUrl(PATH), params.getBodyRequest());
+        this.token = token;
+    }
+
+    @Override
+    protected void configureRequest(final HttpGet get) {
+        get.addHeader(AUTH, BEARER + " " + token);
     }
 
     @Override
@@ -35,5 +43,8 @@ public class MyPostsTask extends WebServiceTask {
     }
 
     public void onPostExecute(final List<Post> posts) {
+    }
+
+    public static class Parameters extends BaseParameters<Parameters> {
     }
 }

@@ -1,9 +1,11 @@
 package pt.isec.amov.petfinder.core;
 
+import java.io.Serializable;
+
 /**
  *
  */
-public enum AnimalColor {
+public enum AnimalColor implements Serializable {
     WHITE("white"),
     BLACK("black"),
     BROWN("brown"),

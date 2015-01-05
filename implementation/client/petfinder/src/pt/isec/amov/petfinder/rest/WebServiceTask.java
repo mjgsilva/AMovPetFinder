@@ -6,6 +6,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
@@ -113,12 +114,11 @@ public class WebServiceTask extends AsyncTask<Void, Integer, String> {
 
         // Use our connection and data timeouts as parameters for our
         // DefaultHttpClient
-        HttpClient httpclient = new DefaultHttpClient(getHttpParams());
+        HttpClient httpClient = new DefaultHttpClient(getHttpParams());
         HttpResponse response = null;
 
         try {
             switch (taskType) {
-
                 case POST:
                     HttpPost httpPost = new HttpPost(url);
                     httpPost.addHeader(ACCEPT, MIME_JSON);
@@ -128,23 +128,25 @@ public class WebServiceTask extends AsyncTask<Void, Integer, String> {
                     StringEntity se = new StringEntity(requestBody.toString());
                     httpPost.setEntity(se);
 
-                    response = httpclient.execute(httpPost);
+                    response = execute(httpClient, httpPost);
                     break;
                 case GET:
                     HttpGet httpGet = new HttpGet(url);
                     httpGet.addHeader(CONTENT_TYPE, MIME_JSON);
                     configureRequest(httpGet);
 
-                    response = httpclient.execute(httpGet);
+                    response = execute(httpClient, httpGet);
                     break;
             }
         } catch (Exception e) {
-
             Log.e(TAG, e.getLocalizedMessage(), e);
-
         }
 
         return response;
+    }
+
+    private HttpResponse execute(final HttpClient http, final HttpUriRequest request) throws IOException {
+        return http.execute(request);
     }
 
     protected void configureRequest(final HttpPost post) { }
