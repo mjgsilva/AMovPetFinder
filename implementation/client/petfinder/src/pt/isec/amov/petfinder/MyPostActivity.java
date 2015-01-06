@@ -1,8 +1,12 @@
 package pt.isec.amov.petfinder;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 import pt.isec.amov.petfinder.core.PetFinderApp;
 import pt.isec.amov.petfinder.entities.Post;
 import pt.isec.amov.petfinder.rest.GetPostByIdTask;
@@ -12,7 +16,7 @@ import pt.isec.amov.petfinder.rest.GetPostsAdvancedTask;
 /**
  * Created by mgois on 04-01-2015.
  */
-public class MyPostActivity extends Activity implements PostFragment.PostHost {
+public class MyPostActivity extends Activity implements PostFragment.PostHost, DeleteMyPostConfirmationDialog.Listener {
 
     public static final String PARAM_POST_ID = "postId";
 
@@ -43,5 +47,34 @@ public class MyPostActivity extends Activity implements PostFragment.PostHost {
     @Override
     public Post getPost() {
         return post;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        getMenuInflater().inflate(R.menu.my_post_menu, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.myPostMenu_delete:
+                final DialogFragment fragment = new DeleteMyPostConfirmationDialog();
+                fragment.show(getFragmentManager(), DeleteMyPostConfirmationDialog.TAG);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onDialogPostitiveClick(final DialogFragment dialog) {
+        Toast.makeText(this, "Delete post", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        // do nothing
     }
 }
