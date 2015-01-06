@@ -3,6 +3,10 @@ package pt.isec.amov.petfinder.rest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static pt.isec.amov.petfinder.rest.HttpConstants.BAD_GATEWAY;
+import static pt.isec.amov.petfinder.rest.RestConstants.VALID;
+import static pt.isec.amov.petfinder.rest.RestConstants.VALID_NOT_OK;
+import static pt.isec.amov.petfinder.rest.RestConstants.VALID_OK;
 import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.POST;
 
 /**
@@ -19,15 +23,15 @@ public class SignUpTask extends WebServiceTask {
 
     @Override
     protected void onPostExecute(final String response) {
-        String valid = "notok";
+        String valid = VALID_NOT_OK;
         boolean isValid = false;
-        if(!response.contains("Bad Gateway")) {
+        if(!response.contains(BAD_GATEWAY)) {
             try {
                 JSONObject obj = new JSONObject(response);
-                valid = obj.getString("valid");
+                valid = obj.getString(VALID);
             } catch (JSONException e) {}
         }
-        if(valid.equals("ok"))
+        if(valid.equals(VALID_OK))
             isValid = true;
         this.onPostExecute(true);
     }
