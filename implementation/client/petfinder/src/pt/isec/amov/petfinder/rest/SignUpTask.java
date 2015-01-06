@@ -10,7 +10,7 @@ import static pt.isec.amov.petfinder.rest.RestConstants.VALID_OK;
 import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.POST;
 
 /**
- * Created by mario on 31/12/14.
+ *
  */
 public class SignUpTask extends WebServiceTask {
 
@@ -22,21 +22,24 @@ public class SignUpTask extends WebServiceTask {
     }
 
     @Override
-    protected void onPostExecute(final String response) {
+    protected void onTaskSuccess(final String response) {
         String valid = VALID_NOT_OK;
         boolean isValid = false;
         if(!response.contains(BAD_GATEWAY)) {
             try {
                 JSONObject obj = new JSONObject(response);
                 valid = obj.getString(VALID);
-            } catch (JSONException e) {}
+            } catch (final JSONException e) {
+                // TODO add log
+                onTaskError(e);
+            }
         }
         if(valid.equals(VALID_OK))
             isValid = true;
-        this.onPostExecute(true);
+        this.onTaskSuccess(true);
     }
 
-    public void onPostExecute(final boolean valid) {
+    public void onTaskSuccess(final boolean valid) {
         // override to provide some meaningful behavior
     }
 

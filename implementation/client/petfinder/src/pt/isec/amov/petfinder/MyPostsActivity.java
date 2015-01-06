@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 import pt.isec.amov.petfinder.core.PetFinderApp;
 import pt.isec.amov.petfinder.entities.Post;
 import pt.isec.amov.petfinder.rest.MyPostsTask;
@@ -30,7 +29,7 @@ public class MyPostsActivity extends Activity implements PostListFragment.PostLi
         // Fetch my posts and after that introduce the fragment that will render them
         new MyPostsTask(app.getApiParams(), app.getToken().getAccessToken(), new Parameters()) {
             @Override
-            public void onPostExecute(final List<Post> posts) {
+            public void onTaskSuccess(final List<Post> posts) {
                 // Save the posts and introduce the fragment
                 MyPostsActivity.this.posts = posts;
 

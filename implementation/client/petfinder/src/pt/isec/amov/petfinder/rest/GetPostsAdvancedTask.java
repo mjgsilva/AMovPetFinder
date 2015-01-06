@@ -40,18 +40,19 @@ public class GetPostsAdvancedTask extends WebServiceTask {
 
 
     @Override
-    protected void onPostExecute(final String response) {
+    protected void onTaskSuccess(final String response) {
         try {
             final JSONArray json = new JSONArray(new JSONTokener(response));
             final List<Post> posts = PostJsonHelper.fromJson(json);
 
-            onPostExecute(posts);
-        } catch (JSONException e) {
-            e.printStackTrace(); // TODO create an override
+            onTaskSuccess(posts);
+        } catch (final JSONException e) {
+            // TODO add log
+            onTaskError(e);
         }
     }
 
-    public void onPostExecute(final List<Post> posts) {
+    public void onTaskSuccess(final List<Post> posts) {
         // override to provide some meaningful behavior
     }
 

@@ -58,7 +58,7 @@ public class StartActivity extends Activity {
                                     new AuthenticateUserTask.Parameters(username, password).setConnTimeout(5000)) {
 
                                 @Override
-                                public void onPostExecute(boolean isLoginValid, String accessToken, String refreshToken, long expiresIn) {
+                                public void onTaskSuccess(boolean isLoginValid, String accessToken, String refreshToken, long expiresIn) {
                                     if(isLoginValid) {
                                         setUpNewToken(accessToken,refreshToken,expiresIn);
                                         launchMainActivity();

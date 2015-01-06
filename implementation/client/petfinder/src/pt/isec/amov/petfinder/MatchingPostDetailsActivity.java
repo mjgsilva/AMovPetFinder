@@ -27,7 +27,7 @@ public class MatchingPostDetailsActivity extends Activity implements PostFragmen
 
         new GetPostByIdTask(app.getApiParams(), app.getToken().getAccessToken(), new GetPostByIdTask.Parameters(), id) {
             @Override
-            public void onPostExecute(final Post post) {
+            public void onTaskSuccess(final Post post) {
                 // Save the post and introduce the fragment
                 MatchingPostDetailsActivity.this.post = post;
 

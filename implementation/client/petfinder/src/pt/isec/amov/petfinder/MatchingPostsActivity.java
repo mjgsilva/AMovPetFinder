@@ -47,7 +47,7 @@ public class MatchingPostsActivity extends Activity implements PostListFragment.
         new GetPostsAdvancedTask(app.getApiParams(), app.getToken().getAccessToken(), new GetPostsAdvancedTask.Parameters(type,location,specie,size,color)) {
 
             @Override
-            public void onPostExecute(final List<Post> posts) {
+            public void onTaskSuccess(final List<Post> posts) {
                 MatchingPostsActivity.this.posts = posts;
 
                 fm.beginTransaction()

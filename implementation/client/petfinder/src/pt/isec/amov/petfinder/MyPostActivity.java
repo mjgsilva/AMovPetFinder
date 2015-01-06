@@ -35,7 +35,7 @@ public class MyPostActivity extends Activity implements PostFragment.PostHost, D
 
         new GetPostByIdTask(app.getApiParams(), app.getToken().getAccessToken(), new Parameters(), id) {
             @Override
-            public void onPostExecute(final Post post) {
+            public void onTaskSuccess(final Post post) {
                 // Save the post and introduce the fragment
                 MyPostActivity.this.post = post;
 
@@ -75,7 +75,7 @@ public class MyPostActivity extends Activity implements PostFragment.PostHost, D
         //
         new DeletePostTask(app.getApiParams(), app.getToken().getAccessToken(), new DeletePostTask.Parameters(), post.getPostId()) {
             @Override
-            public void onPostExecute(final boolean deleted) {
+            public void onTaskSuccess(final boolean deleted) {
                 final Activity activity = MyPostActivity.this;
 
                 if (deleted) {

@@ -9,7 +9,6 @@ import pt.isec.amov.petfinder.core.*;
 import java.util.List;
 import java.util.Set;
 
-import static pt.isec.amov.petfinder.json.PostJsonHelper.colorsToJsonArray;
 import static pt.isec.amov.petfinder.json.PostJsonHelper.imagesToJsonArray;
 import static pt.isec.amov.petfinder.rest.PostConstants.LATITUDE;
 import static pt.isec.amov.petfinder.rest.PostConstants.LONGITUDE;
@@ -40,21 +39,24 @@ public class CreatePostTask extends WebServiceTask {
     }
 
     @Override
-    protected void onPostExecute(final String response) {
+    protected void onTaskSuccess(final String response) {
         String valid = "";
         boolean isValid = false;
         try {
             final JSONObject jsonObject = new JSONObject(response);
             valid = jsonObject.getString("valid");
-        } catch(JSONException e) { e.printStackTrace(); }
+        } catch(final JSONException e) {
+            // TODO add log
+            onTaskError(e);
+        }
 
         if(valid.equals("ok"))
             isValid = true;
 
-        this.onPostExecute(isValid);
+        this.onTaskSuccess(isValid);
     }
 
-    public void onPostExecute(final boolean valid) {
+    public void onTaskSuccess(final boolean valid) {
         // override to provide some meaningful behavior
     }
 

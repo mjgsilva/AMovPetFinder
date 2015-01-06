@@ -30,18 +30,19 @@ public class GetPostByIdTask extends WebServiceTask {
     }
 
     @Override
-    protected void onPostExecute(final String response) {
+    protected void onTaskSuccess(final String response) {
         try {
             final JSONObject json = new JSONObject(response);
             final Post post = PostJsonHelper.fromJSON(json);
 
-            onPostExecute(post);
+            onTaskSuccess(post);
         } catch (final JSONException e) {
-            e.printStackTrace(); // TODO add proper error handling
+            // TODO add log
+            onTaskError(e);
         }
     }
 
-    public void onPostExecute(final Post post) {
+    public void onTaskSuccess(final Post post) {
         // Override to provide meaningful behavior
     }
 

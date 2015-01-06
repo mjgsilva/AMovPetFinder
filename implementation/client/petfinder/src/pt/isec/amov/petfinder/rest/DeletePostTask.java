@@ -29,18 +29,19 @@ public class DeletePostTask extends WebServiceTask {
     }
 
     @Override
-    protected void onPostExecute(final String response) {
+    protected void onTaskSuccess(final String response) {
         try {
             final JSONObject json = new JSONObject(response);
 
             final boolean deleted = json.getString(VALID).equals(VALID_OK);
-            onPostExecute(deleted);
-        } catch (JSONException e) {
-            e.printStackTrace(); // TODO create an override
+            onTaskSuccess(deleted);
+        } catch (final JSONException e) {
+            // TODO add log
+            onTaskError(e);
         }
     }
 
-    public void onPostExecute(final boolean deleted) {
+    public void onTaskSuccess(final boolean deleted) {
         // Override to provide meaningful behavior
     }
 
