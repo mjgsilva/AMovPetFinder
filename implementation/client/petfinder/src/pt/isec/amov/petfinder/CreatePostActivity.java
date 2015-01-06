@@ -138,7 +138,7 @@ public class CreatePostActivity extends Activity {
                             new CreatePostTask(app.getApiParams(), app.getToken().getAccessToken(), params) {
 
                                 @Override
-                                public void onTaskSuccess(final boolean valid) {
+                                public void onTaskSuccess(final Boolean valid) {
                                     if(valid) {
                                         showMessage(successCreatingPost);
                                         launchMainActivity();

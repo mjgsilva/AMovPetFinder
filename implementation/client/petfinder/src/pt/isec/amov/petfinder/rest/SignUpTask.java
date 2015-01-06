@@ -12,7 +12,7 @@ import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.POST;
 /**
  *
  */
-public class SignUpTask extends WebServiceTask {
+public class SignUpTask extends WebServiceTask<Boolean> {
 
     private static final String PATH = "/user";
 
@@ -22,7 +22,7 @@ public class SignUpTask extends WebServiceTask {
     }
 
     @Override
-    protected void onTaskSuccess(final String response) {
+    protected Boolean onResponse(final String response) {
         String valid = VALID_NOT_OK;
         boolean isValid = false;
         if(!response.contains(BAD_GATEWAY)) {
@@ -31,15 +31,17 @@ public class SignUpTask extends WebServiceTask {
                 valid = obj.getString(VALID);
             } catch (final JSONException e) {
                 // TODO add log
-                onTaskError(e);
+                throw new RuntimeException(e); // TODO add message
             }
         }
         if(valid.equals(VALID_OK))
             isValid = true;
-        this.onTaskSuccess(true);
+
+        return isValid;
     }
 
-    public void onTaskSuccess(final boolean valid) {
+    @Override
+    public void onTaskSuccess(final Boolean valid) {
         // override to provide some meaningful behavior
     }
 

@@ -75,7 +75,7 @@ public class MyPostActivity extends Activity implements PostFragment.PostHost, D
         //
         new DeletePostTask(app.getApiParams(), app.getToken().getAccessToken(), new DeletePostTask.Parameters(), post.getPostId()) {
             @Override
-            public void onTaskSuccess(final boolean deleted) {
+            public void onTaskSuccess(final Boolean deleted) {
                 final Activity activity = MyPostActivity.this;
 
                 if (deleted) {

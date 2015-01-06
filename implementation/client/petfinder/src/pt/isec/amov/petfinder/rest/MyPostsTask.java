@@ -15,7 +15,7 @@ import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.GET;
 /**
  *
  */
-public class MyPostsTask extends WebServiceTask {
+public class MyPostsTask extends WebServiceTask<List<Post>> {
 
     private static final String PATH = "/myPosts";
 
@@ -33,18 +33,20 @@ public class MyPostsTask extends WebServiceTask {
     }
 
     @Override
-    protected void onTaskSuccess(final String response) {
+    protected List<Post> onResponse(final String response) {
+        final List<Post> posts;
         try {
             final JSONArray json = new JSONArray(new JSONTokener(response));
-            final List<Post> posts = PostJsonHelper.fromJson(json);
-
-            onTaskSuccess(posts);
+            posts = PostJsonHelper.fromJson(json);
         } catch (final JSONException e) {
             // TODO add log
-            onTaskError(e);
+            throw new RuntimeException(e); // TODO add message
         }
+
+        return posts;
     }
 
+    @Override
     public void onTaskSuccess(final List<Post> posts) {
         // Override to provide meaningful behavior
     }

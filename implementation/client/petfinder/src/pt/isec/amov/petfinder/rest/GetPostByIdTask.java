@@ -12,7 +12,7 @@ import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.GET;
 /**
  * Created by mgois on 06-01-2015.
  */
-public class GetPostByIdTask extends WebServiceTask {
+public class GetPostByIdTask extends WebServiceTask<Post> {
 
     private static final String PATH = "/post";
 
@@ -30,18 +30,20 @@ public class GetPostByIdTask extends WebServiceTask {
     }
 
     @Override
-    protected void onTaskSuccess(final String response) {
+    protected Post onResponse(final String response) {
+        final Post post;
         try {
             final JSONObject json = new JSONObject(response);
-            final Post post = PostJsonHelper.fromJSON(json);
-
-            onTaskSuccess(post);
+            post = PostJsonHelper.fromJSON(json);
         } catch (final JSONException e) {
             // TODO add log
-            onTaskError(e);
+            throw new RuntimeException(e); // TODO add message
         }
+
+        return post;
     }
 
+    @Override
     public void onTaskSuccess(final Post post) {
         // Override to provide meaningful behavior
     }

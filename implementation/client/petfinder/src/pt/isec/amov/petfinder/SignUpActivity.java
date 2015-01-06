@@ -59,7 +59,7 @@ public class SignUpActivity extends Activity {
                                     new SignUpTask.Parameters(username, password, phoneNumber).setConnTimeout(5000)) {
 
                                 @Override
-                                public void onTaskSuccess(final boolean isValid) {
+                                public void onTaskSuccess(final Boolean isValid) {
                                     if(isValid) {
                                         launchStartActivity();
                                     } else {

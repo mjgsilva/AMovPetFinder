@@ -14,15 +14,17 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.json.JSONObject;
+import pt.isec.amov.petfinder.core.LogTags;
 
 import java.io.*;
+
+import static pt.isec.amov.petfinder.core.LogTags.REST;
+import static pt.isec.amov.petfinder.rest.StreamUtils.inputStreamToString;
 
 /**
  *
  */
-public abstract class WebServiceTask extends AsyncTask<Void, Integer, HttpResponse> {
-
-    private static final String TAG = "WebServiceTask";
+public abstract class WebServiceTask<T> extends AsyncTask<Void, Integer, T> {
 
     // connection timeout, in milliseconds (waiting to connect)
     public static final int CONN_TIMEOUT = 3000;
@@ -37,11 +39,11 @@ public abstract class WebServiceTask extends AsyncTask<Void, Integer, HttpRespon
     public static final String BEARER = "Bearer";
     public static final String BASIC = "Basic";
 
-    private final TaskType taskType;
-    private final int connTimeout;
-    private final int socketTimeout;
-    private final String url;
-    private final JSONObject requestBody;
+    protected final TaskType taskType;
+    protected final int connTimeout;
+    protected final int socketTimeout;
+    protected final String url;
+    protected final JSONObject requestBody;
 
     protected Exception taskException;
 
@@ -55,71 +57,50 @@ public abstract class WebServiceTask extends AsyncTask<Void, Integer, HttpRespon
     }
 
     @Override
-    protected HttpResponse doInBackground(final Void... params) {
+    protected T doInBackground(final Void... params) {
         HttpResponse response = null;
+        T result = null;
         try {
-            response = doResponse(url);
-        } catch (final IllegalStateException e) {
-            Log.e(TAG, e.getLocalizedMessage(), e);
-            taskException = e; // hold the exception to use in the onTaskSuccess
-        } catch (final IOException e) {
-            Log.e(TAG, e.getLocalizedMessage(), e);
+            response = doResponse(taskType, url, requestBody);
+            result = onResponse(response);
+        } catch (final Exception e) {
+            Log.e(REST, "An error occurred while executing the API request", e);
             taskException = e; // hold the exception to use in the onTaskSuccess
         }
 
-        return response;
+        return result;
     }
 
     @Override
-    protected void onPostExecute(final HttpResponse response) {
+    protected void onPostExecute(final T response) {
         if (taskException != null) {
             onTaskError(taskException);
         } else {
-            try {
-                onTaskSuccess(response);
-            } catch (final IOException e) {
-                // If an error occurs while processing the response, it's still a task error
-                onTaskError(e);
-            }
+            onTaskSuccess(response);
         }
     }
 
     protected void configureRequest(final HttpUriRequest request) { }
 
-    protected void onTaskSuccess(final HttpResponse response) throws IOException {
+    protected T onResponse(final HttpResponse response) throws IOException {
         // read the entity content and call the overload
-        onTaskSuccess(inputStreamToString(response.getEntity().getContent()));
+        return onResponse(inputStreamToString(response.getEntity().getContent()));
     }
 
-    protected void onTaskSuccess(final String content) {
+    protected T onResponse(final String content) {
+        // Override to convert into the return value
+        return null;
+    }
+
+    protected void onTaskSuccess(final T content) {
         // Override to handle the result of the task execution
     }
 
     protected void onTaskError(final Exception e) {
         // Override to handle error during the task execution
-    };
-
-    private String inputStreamToString(final InputStream is) throws IOException {
-        final BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-        final StringBuilder total = new StringBuilder();
-
-        try {
-            // Read response until the end
-            String line;
-            while ((line = rd.readLine()) != null) {
-                total.append(line);
-            }
-        } catch (final IOException e) {
-            // TODO remove this log ?
-            Log.e(TAG, e.getLocalizedMessage(), e);
-            throw e;
-        }
-
-        return total.toString();
     }
 
     private HttpParams getHttpParams() {
-
         HttpParams http = new BasicHttpParams();
 
         HttpConnectionParams.setConnectionTimeout(http, connTimeout);
@@ -128,45 +109,40 @@ public abstract class WebServiceTask extends AsyncTask<Void, Integer, HttpRespon
         return http;
     }
 
-    private HttpResponse doResponse(String url) throws IOException {
+    protected HttpResponse doResponse(final TaskType type, final String url, final JSONObject requestBody) throws IOException {
         // Use our connection and data timeouts as parameters for our
         // DefaultHttpClient
-        HttpClient httpClient = new DefaultHttpClient(getHttpParams());
+        HttpClient http = new DefaultHttpClient(getHttpParams());
         HttpResponse response = null;
 
-        try {
-            switch (taskType) {
-                case POST:
-                    HttpPost httpPost = new HttpPost(url);
-                    httpPost.addHeader(ACCEPT, MIME_JSON);
-                    httpPost.addHeader(CONTENT_TYPE, MIME_JSON);
-                    configureRequest(httpPost);
+        Log.i(REST, "[" + type + "] " + url);
 
-                    StringEntity se = new StringEntity(requestBody.toString());
-                    httpPost.setEntity(se);
+        switch (type) {
+            case POST:
+                HttpPost post = new HttpPost(url);
+                post.addHeader(ACCEPT, MIME_JSON);
+                post.addHeader(CONTENT_TYPE, MIME_JSON);
+                configureRequest(post);
 
-                    response = execute(httpClient, httpPost);
-                    break;
-                case GET:
-                    HttpGet httpGet = new HttpGet(url);
-                    httpGet.addHeader(CONTENT_TYPE, MIME_JSON);
-                    configureRequest(httpGet);
+                StringEntity se = new StringEntity(requestBody.toString());
+                post.setEntity(se);
 
-                    response = execute(httpClient, httpGet);
-                    break;
-                case DELETE:
-                    HttpDelete httpDelete = new HttpDelete(url);
-                    httpDelete.addHeader(CONTENT_TYPE, MIME_JSON);
-                    configureRequest(httpDelete);
+                response = execute(http, post);
+                break;
+            case GET:
+                HttpGet get = new HttpGet(url);
+                get.addHeader(CONTENT_TYPE, MIME_JSON);
+                configureRequest(get);
 
-                    response = execute(httpClient, httpDelete);
-                    break;
-            }
-        } catch (final IOException e) {
-            // TODO do some logging?
-            Log.e(TAG, e.getLocalizedMessage(), e);
+                response = execute(http, get);
+                break;
+            case DELETE:
+                HttpDelete delete = new HttpDelete(url);
+                delete.addHeader(CONTENT_TYPE, MIME_JSON);
+                configureRequest(delete);
 
-            throw e;
+                response = execute(http, delete);
+                break;
         }
 
         return response;
@@ -176,8 +152,6 @@ public abstract class WebServiceTask extends AsyncTask<Void, Integer, HttpRespon
     private HttpResponse execute(final HttpClient http, final HttpUriRequest request) throws IOException {
         return http.execute(request);
     }
-
-
 
     public static enum TaskType {
 

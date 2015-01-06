@@ -11,7 +11,7 @@ import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.POST;
 /**
  *
  */
-public class AuthenticateUserTask extends WebServiceTask {
+public class AuthenticateUserTask extends WebServiceTask<AuthenticateUserTask.Tokens> {
 
     private static final String TAG = "AuthenticateUserTask";
     private static final String PATH = "/oauth/token";
@@ -33,7 +33,7 @@ public class AuthenticateUserTask extends WebServiceTask {
     }
 
     @Override
-    protected void onTaskSuccess(final String response) {
+    protected Tokens onResponse(final String response) {
         boolean isLoginValid = false;
         String accessToken = "";
         String refreshToken = "";
@@ -48,16 +48,31 @@ public class AuthenticateUserTask extends WebServiceTask {
                 expiresIn = obj.getLong("expires_in");
             } catch (final JSONException e) {
                 // TODO add log
-                onTaskError(e);
+                throw new RuntimeException(e); // TODO add message
             }
             isLoginValid = true;
         }
         // call the task-specific overload
-        this.onTaskSuccess(isLoginValid, accessToken, refreshToken, expiresIn);
+        return new Tokens(isLoginValid, accessToken, refreshToken, expiresIn);
     }
 
-    public void onTaskSuccess(final boolean isLoginValid, final String accessToken, final String refreshToken, final long expiresIn) {
+    @Override
+    public void onTaskSuccess(final Tokens tokens) {
         // override to provide some meaningful behavior
+    }
+
+    public class Tokens {
+        public final boolean isLoginValid;
+        public final String accessToken;
+        public final String refreshToken;
+        public final long expiresIn;
+
+        public Tokens(boolean isLoginValid, String accessToken, String refreshToken, long expiresIn) {
+            this.isLoginValid = isLoginValid;
+            this.accessToken = accessToken;
+            this.refreshToken = refreshToken;
+            this.expiresIn = expiresIn;
+        }
     }
 
     public static class Parameters extends BaseParameters<Parameters> {

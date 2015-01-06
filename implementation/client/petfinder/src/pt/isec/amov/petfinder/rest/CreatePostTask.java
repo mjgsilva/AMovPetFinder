@@ -24,7 +24,7 @@ import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.POST;
 /**
  *
  */
-public class CreatePostTask extends WebServiceTask {
+public class CreatePostTask extends WebServiceTask<Boolean> {
 
     private static final String PATH = "/post";
 
@@ -42,7 +42,7 @@ public class CreatePostTask extends WebServiceTask {
     }
 
     @Override
-    protected void onTaskSuccess(final String response) {
+    protected Boolean onResponse(final String response) {
         String valid = "";
         boolean isValid = false;
         Log.d("onTaskSuccess", response);
@@ -53,16 +53,17 @@ public class CreatePostTask extends WebServiceTask {
             valid = jsonObject.getString("valid");
         } catch(final JSONException e) {
             // TODO add log
-            onTaskError(e);
+            throw new RuntimeException(e); // TODO add message
         }
 
         if(valid.equals("ok"))
             isValid = true;
 
-        this.onTaskSuccess(isValid);
+        return isValid;
     }
 
-    public void onTaskSuccess(final boolean valid) {
+    @Override
+    public void onTaskSuccess(final Boolean valid) {
         // override to provide some meaningful behavior
     }
 

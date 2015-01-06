@@ -12,7 +12,7 @@ import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.DELETE;
 /**
  *
  */
-public class DeletePostTask extends WebServiceTask {
+public class DeletePostTask extends WebServiceTask<Boolean> {
     private static final String PATH = "/post";
 
     private final String token;
@@ -29,19 +29,22 @@ public class DeletePostTask extends WebServiceTask {
     }
 
     @Override
-    protected void onTaskSuccess(final String response) {
+    protected Boolean onResponse(final String response) {
+        final boolean deleted;
         try {
             final JSONObject json = new JSONObject(response);
 
-            final boolean deleted = json.getString(VALID).equals(VALID_OK);
-            onTaskSuccess(deleted);
+            deleted = json.getString(VALID).equals(VALID_OK);
         } catch (final JSONException e) {
             // TODO add log
-            onTaskError(e);
+            throw new RuntimeException(e); // TODO add message
         }
+
+        return deleted;
     }
 
-    public void onTaskSuccess(final boolean deleted) {
+    @Override
+    public void onTaskSuccess(final Boolean deleted) {
         // Override to provide meaningful behavior
     }
 
