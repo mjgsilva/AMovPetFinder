@@ -156,7 +156,8 @@ public class WebServiceTask extends AsyncTask<Void, Integer, String> {
     public static enum TaskType {
 
         POST(1),
-        GET(2);
+        GET(2),
+        DELETE(3);
 
         public final int type;
 

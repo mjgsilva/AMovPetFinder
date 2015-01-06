@@ -84,7 +84,7 @@ public class PostJsonHelperTest extends TestCase {
                 .put(TYPE, type.getValue())
                 .put(IMAGES, new JSONArray().put(encodedImage))
                 .put(LOCATION, new JSONArray().put(latitude).put(longitude))
-                .put(PUBDATE, serializedDate)
+                .put(PUB_DATE, serializedDate)
                 .put(METADATA,
                         new JSONObject()
                                 .put(SPECIE, specie.getValue())
@@ -135,7 +135,7 @@ public class PostJsonHelperTest extends TestCase {
                 .put(TYPE, type.getValue())
                 .put(IMAGES, new JSONArray().put(encodedImage))
                 .put(LOCATION, new JSONArray().put(latitude).put(longitude))
-                .put(PUBDATE, serializedDate)
+                .put(PUB_DATE, serializedDate)
                 .put(METADATA,
                         new JSONObject()
                                 .put(SPECIE, specie.getValue())

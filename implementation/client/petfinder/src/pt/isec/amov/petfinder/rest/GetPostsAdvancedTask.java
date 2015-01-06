@@ -1,12 +1,21 @@
 package pt.isec.amov.petfinder.rest;
 
-import pt.isec.amov.petfinder.core.AnimalColor;
-import pt.isec.amov.petfinder.core.Location;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONTokener;
+import pt.isec.amov.petfinder.core.*;
 import pt.isec.amov.petfinder.entities.Post;
+import pt.isec.amov.petfinder.json.JsonTimeUtils;
+import pt.isec.amov.petfinder.json.PostJsonHelper;
+import pt.isec.amov.petfinder.rest.PostConstants.Metadata;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
+import static pt.isec.amov.petfinder.json.PostJsonHelper.colorsToJsonArray;
+import static pt.isec.amov.petfinder.rest.PostConstants.*;
+import static pt.isec.amov.petfinder.rest.PostConstants.Metadata.*;
 import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.POST;
 
 /**
@@ -21,12 +30,15 @@ public class GetPostsAdvancedTask extends WebServiceTask {
     }
 
     @Override
-    protected void onPostExecute(final String s) {
-        // TODO deserialize the response into the following variable
-        List<Post> posts = null;
+    protected void onPostExecute(final String response) {
+        try {
+            final JSONArray json = new JSONArray(new JSONTokener(response));
+            final List<Post> posts = PostJsonHelper.fromJson(json);
 
-        // call the task-specific overload
-        onPostExecute(posts);
+            onPostExecute(posts);
+        } catch (JSONException e) {
+            e.printStackTrace(); // TODO create an override
+        }
     }
 
     public void onPostExecute(final List<Post> posts) {
@@ -35,38 +47,22 @@ public class GetPostsAdvancedTask extends WebServiceTask {
 
     public static class Parameters extends BaseParameters<Parameters> {
 
-        // TODO Deprecate this constants
-        public static final String POST_TYPE = "type"; //required
-        public static final String GEOLOCATION = "location"; //required
-        public static final String SPECIE = "specie"; // required
-        public static final String SIZE = "size";
-        public static final String COLOR = "color";
-        public static final String POST_DATE = "publicationDate";
-
-        // TODO consider a proper type for species?
-        public Parameters(final int postType, final Location location, final String specie) {
+        public Parameters(final PostType type, final Location location, final AnimalSpecie specie) {
             // TODO validate null
-            insertPair(POST_TYPE, String.valueOf(postType));
-            insertPair(GEOLOCATION, location.toString()); // TODO serialize properly [lat,lng]
-            insertPair(SPECIE, specie);
+            insertPair(TYPE, type.getValue());
+            insertPair(LATITUDE, Double.toString(location.getLatitute()));
+            insertPair(LONGITUDE, Double.toString(location.getLongitude()));
+            insertPair(SPECIE, specie.getValue());
         }
 
-        // TODO consider a proper type for size?
-        public Parameters size(final String size) {
-            insertPair(SIZE, size); //TODO {.. metadata: { specie: x, ...} }
+        public Parameters size(final AnimalSize size) {
+            insertPair(SIZE, size.getValue());
 
             return this;
         }
 
-        // TODO multiple colors? Is this the correct type?
-        public Parameters color(final AnimalColor color) {
-            insertPair(COLOR, color.toString()); // TODO serialize properly
-
-            return this;
-        }
-
-        public Parameters postDate(final Date date) {
-            insertPair(POST_DATE, date.toString()); // TODO serialize properly
+        public Parameters color(final Set<AnimalColor> color) {
+            insertPair(COLOR, colorsToJsonArray(color).toString());
 
             return this;
         }

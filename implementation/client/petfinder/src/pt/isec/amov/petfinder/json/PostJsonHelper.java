@@ -61,7 +61,7 @@ public class PostJsonHelper {
         post.getImages().addAll(imagesFromJsonArray(json.getJSONArray(IMAGES)));
         post.setLocation(locationFromJsonArray(json.getJSONArray(LOCATION)));
         try {
-            post.setPublicationDate(JsonTimeUtils.fromString(json.getString(PUBDATE)));
+            post.setPublicationDate(JsonTimeUtils.fromString(json.getString(PUB_DATE)));
         } catch (final ParseException e) {
             // We don't want to pollute the interface with a ParseException just because we chose to use
             // Java's SimpleDateFormat to parse the dates. Wrap it in a JSONException
@@ -89,7 +89,7 @@ public class PostJsonHelper {
         return colors;
     }
 
-    static JSONArray colorsToJsonArray(final Set<? extends AnimalColor> colors) {
+    public static JSONArray colorsToJsonArray(final Set<? extends AnimalColor> colors) {
         final JSONArray array = new JSONArray();
 
         for (final AnimalColor color : colors) {
