@@ -64,7 +64,7 @@ exports.myPosts = function(req, res) {
     Token.findOne({ accessToken: accessToken }, function(err, tokenRecord) {
         if(err) { res.send(err) }
         else {
-            Post.find({ userId: tokenRecord.userId }, function (err, posts) {
+            Post.find({ userId: tokenRecord.userId }).sort({publicationDate: 'desc'}).exec(function (err, posts) {
                 if (err) { res.send(err) }
                 else { res.send(posts) }
             });
@@ -103,6 +103,7 @@ exports.findPost = function(req, res) {
 
     if (req.body.color) { query.where('metadata.color').in(req.body.color); }
 
+    query.sort({publicationDate: 'desc'});
     query.exec(function(err, posts){
         if(err) { res.send(err) }
         else { res.send(posts) }
