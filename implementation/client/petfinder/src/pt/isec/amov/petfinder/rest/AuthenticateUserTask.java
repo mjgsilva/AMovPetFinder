@@ -2,6 +2,7 @@ package pt.isec.amov.petfinder.rest;
 
 import android.util.Base64;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,7 +25,8 @@ public class AuthenticateUserTask extends WebServiceTask {
     }
 
     @Override
-    protected void configureRequest(final HttpPost post) {
+    protected void configureRequest(final HttpUriRequest request) {
+        final HttpPost post = (HttpPost) request;
         final String cred = credentials.getId() + ":" + credentials.getSecret();
         final String encoded = Base64.encodeToString(cred.getBytes(), Base64.NO_WRAP);
         post.setHeader(AUTH, BASIC + " " + encoded);

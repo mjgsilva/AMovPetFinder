@@ -1,6 +1,7 @@
 package pt.isec.amov.petfinder.rest;
 
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONTokener;
@@ -26,7 +27,8 @@ public class MyPostsTask extends WebServiceTask {
     }
 
     @Override
-    protected void configureRequest(final HttpGet get) {
+    protected void configureRequest(final HttpUriRequest request) {
+        final HttpGet get = (HttpGet) request;
         get.addHeader(AUTH, BEARER + " " + token);
     }
 

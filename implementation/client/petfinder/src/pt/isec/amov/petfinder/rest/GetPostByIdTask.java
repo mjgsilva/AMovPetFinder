@@ -1,6 +1,7 @@
 package pt.isec.amov.petfinder.rest;
 
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 import pt.isec.amov.petfinder.entities.Post;
@@ -23,7 +24,8 @@ public class GetPostByIdTask extends WebServiceTask {
     }
 
     @Override
-    protected void configureRequest(final HttpGet get) {
+    protected void configureRequest(final HttpUriRequest request) {
+        final HttpGet get = (HttpGet) request;
         get.addHeader(AUTH, BEARER + " " + token);
     }
 

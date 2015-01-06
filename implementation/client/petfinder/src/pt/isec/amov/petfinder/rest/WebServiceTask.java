@@ -149,9 +149,7 @@ public class WebServiceTask extends AsyncTask<Void, Integer, String> {
         return http.execute(request);
     }
 
-    protected void configureRequest(final HttpPost post) { }
-
-    protected void configureRequest(final HttpGet get) { }
+    protected void configureRequest(final HttpUriRequest request) { }
 
     public static enum TaskType {
 

@@ -1,6 +1,7 @@
 package pt.isec.amov.petfinder.rest;
 
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 import pt.isec.amov.petfinder.core.*;
@@ -33,7 +34,8 @@ public class CreatePostTask extends WebServiceTask {
     }
 
     @Override
-    protected void configureRequest(final HttpPost post) {
+    protected void configureRequest(final HttpUriRequest request) {
+        final HttpPost post = (HttpPost) request;
         post.addHeader(AUTH, BEARER + " ");
     }
 
