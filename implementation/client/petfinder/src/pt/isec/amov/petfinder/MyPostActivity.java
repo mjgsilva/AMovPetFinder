@@ -43,6 +43,11 @@ public class MyPostActivity extends Activity implements PostFragment.PostHost, D
                         .add(R.id.myPost_frgPost, new PostFragment())
                         .commit();
             }
+
+            @Override
+            protected void onTaskError(final Exception e) {
+                // TODO report error
+            }
         }.execute();
     }
 

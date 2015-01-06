@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -12,15 +14,9 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.*;
 import pt.isec.amov.petfinder.core.*;
-import pt.isec.amov.petfinder.entities.Post;
-import pt.isec.amov.petfinder.rest.ApiParams;
-import pt.isec.amov.petfinder.rest.AuthenticateUserTask;
 import pt.isec.amov.petfinder.rest.CreatePostTask;
-import pt.isec.amov.petfinder.rest.GetPostsAdvancedTask;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -48,6 +44,7 @@ public class CreatePostActivity extends Activity {
     boolean locationDefined = false;
     double lat, lng;
     String photoPath;
+    private byte[] photoBytes;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -130,9 +127,14 @@ public class CreatePostActivity extends Activity {
 
                             CreatePostTask.Parameters params = new CreatePostTask.Parameters(type,location,specie,size,color);
 
-                            if(photoPath != null) {
+//                            if(photoPath != null) {
+//                                List<byte[]> image = new ArrayList<byte[]>();
+//                                image.add(photoFileToByte());
+//                                params.setImage(image);
+//                            }
+                            if(photoBytes != null) {
                                 List<byte[]> image = new ArrayList<byte[]>();
-                                image.add(photoFileToByte());
+                                image.add(photoBytes);
                                 params.setImage(image);
                             }
 
@@ -338,18 +340,56 @@ public class CreatePostActivity extends Activity {
                 break;
             }
             case (REQ_GET_PHOTO) : {
-                if (requestCode == REQ_GET_PHOTO) {
-                    if (resultCode == RESULT_OK) {
+                if (resultCode == RESULT_OK) {
+                    //final Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
+                    try {
+                        final Bitmap bitmap = fixImageOrientation(new File(photoPath));
                         ivPhoto.setVisibility(View.VISIBLE);
-                        ivPhoto.setImageBitmap(BitmapFactory.decodeFile(photoPath));
-                    } else {
-                        showMessage(errNoPhoto);
+                        ivPhoto.setImageBitmap(bitmap);
+                    } catch (IOException e) {
+                        // TODO error handling
                     }
+
+                } else {
+                    showMessage(errNoPhoto);
                 }
                 break;
             }
             default:
                 break;
         }
+    }
+
+    private Bitmap fixImageOrientation(final File file) throws IOException {
+        final ExifInterface exif = new ExifInterface(file.getAbsolutePath());
+        final int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+        Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+        int rotate = 0;
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                rotate = 270;
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                rotate = 180;
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                rotate = 90;
+                break;
+        }
+
+        if (rotate != 0) {
+            int w = bitmap.getWidth();
+            int h = bitmap.getHeight();
+            Matrix mtx = new Matrix();
+            mtx.postRotate(rotate);
+            bitmap = Bitmap.createBitmap(bitmap, 0, 0, w, h, mtx, true);
+        }
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        // Store the compressed image bytes for further reuse
+        photoBytes = baos.toByteArray();
+
+        return BitmapFactory.decodeStream(new ByteArrayInputStream(photoBytes));
     }
 }
