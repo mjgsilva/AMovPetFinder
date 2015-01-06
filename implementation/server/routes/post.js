@@ -74,16 +74,17 @@ exports.removePost = function(req, res) {
 
 exports.findPost = function(req, res) {
 
-    if (req.body.type || !req.body.lat || !req.body.long || !req.body.specie) {
+    if (!req.body.type || !req.body.lat || !req.body.long || !req.body.specie) {
         res.send({});
         return
     }
 
     var query = Post.find({
-        'type' : req.body.type,
         'location': {$near: [req.body.lat, req.body.long], $maxDistance: POST_GEODISTANCE},
         'metadata.specie': req.body.specie
     });
+
+    query.where('type').ne(req.body.type);
 
     if (req.body.size) { query.where('metadata.size').equals(req.body.size); }
 
