@@ -45,8 +45,6 @@ public class CreatePostTask extends WebServiceTask<Boolean> {
     protected Boolean onResponse(final String response) {
         String valid = "";
         boolean isValid = false;
-        Log.d("onTaskSuccess", response);
-
 
         try {
             final JSONObject jsonObject = new JSONObject(response);

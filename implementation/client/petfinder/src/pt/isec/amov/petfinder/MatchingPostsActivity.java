@@ -55,8 +55,6 @@ public class MatchingPostsActivity extends Activity implements PostListFragment.
                         .commit();
             }
         }.execute();
-
-
     }
 
     @Override
@@ -66,8 +64,8 @@ public class MatchingPostsActivity extends Activity implements PostListFragment.
 
     @Override
     public void postSelected(Post post) {
-        //final Intent intent = new Intent(this, MyPostActivity.class);
-        //intent.putExtra(MyPostActivity.PARAM_POST_ID, post.getPostId());
-        //startActivity(intent);
+        final Intent intent = new Intent(this, MatchingPostDetailsActivity.class);
+        intent.putExtra(MatchingPostDetailsActivity.PARAM_POST_ID, post.getPostId());
+        startActivity(intent);
     }
 }
