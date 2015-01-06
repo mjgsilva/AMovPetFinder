@@ -32,7 +32,7 @@ public class MatchingPostDetailsActivity extends Activity implements PostFragmen
                 MatchingPostDetailsActivity.this.post = post;
 
                 fm.beginTransaction()
-                        .add(R.id.myPost_frgPost, new PostFragment())
+                        .add(R.id.matchingPostDetails_frgPost, new PostFragment())
                         .commit();
             }
         }.execute();
