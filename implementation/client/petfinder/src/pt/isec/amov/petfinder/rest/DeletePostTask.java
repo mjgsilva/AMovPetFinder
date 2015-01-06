@@ -43,11 +43,6 @@ public class DeletePostTask extends WebServiceTask<Boolean> {
         return deleted;
     }
 
-    @Override
-    public void onTaskSuccess(final Boolean deleted) {
-        // Override to provide meaningful behavior
-    }
-
     public static class Parameters extends BaseParameters<Parameters> {
         // This task has no specific parameters
     }
