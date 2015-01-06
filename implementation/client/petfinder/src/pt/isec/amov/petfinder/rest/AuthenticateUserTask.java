@@ -52,7 +52,7 @@ public class AuthenticateUserTask extends WebServiceTask<AuthenticateUserTask.To
             }
             isLoginValid = true;
         }
-        // call the task-specific overload
+
         return new Tokens(isLoginValid, accessToken, refreshToken, expiresIn);
     }
 
