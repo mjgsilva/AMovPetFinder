@@ -77,7 +77,7 @@ public class PostJsonHelper {
         return post;
     }
 
-    static Set<AnimalColor> colorsFromJsonArray(final JSONArray json) throws JSONException {
+    public static Set<AnimalColor> colorsFromJsonArray(final JSONArray json) throws JSONException {
         Validation.assertNotNull(json, "The JSON array cannot be null");
 
         final Set<AnimalColor> colors = new HashSet<AnimalColor>(json.length());
@@ -99,7 +99,7 @@ public class PostJsonHelper {
         return array;
     }
 
-    static List<byte[]> imagesFromJsonArray(final JSONArray json) throws JSONException {
+    public static List<byte[]> imagesFromJsonArray(final JSONArray json) throws JSONException {
         final List<byte[]> images = new ArrayList<byte[]>(json.length());
 
         for (int i = 0; i < json.length(); i++) {
@@ -119,7 +119,7 @@ public class PostJsonHelper {
         return array;
     }
 
-    static Location locationFromJsonArray(final JSONArray json) throws JSONException {
+    public static Location locationFromJsonArray(final JSONArray json) throws JSONException {
         Validation.assertNotNull(json, "The JSON array cannot be null");
 
         return new Location(json.getDouble(0), json.getDouble(1));
