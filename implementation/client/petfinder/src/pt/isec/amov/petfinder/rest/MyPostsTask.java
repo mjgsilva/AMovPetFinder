@@ -38,13 +38,15 @@ public class MyPostsTask extends WebServiceTask {
 
             onPostExecute(posts);
         } catch (JSONException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // TODO create an override
         }
     }
 
     public void onPostExecute(final List<Post> posts) {
+        // Override to provide meaningful behavior
     }
 
     public static class Parameters extends BaseParameters<Parameters> {
+        // This task has no specific parameters
     }
 }

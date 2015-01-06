@@ -36,7 +36,6 @@ public class PostJsonHelperTest extends TestCase {
         final double longitude = -8.4098084;
         final Location location = new Location(latitude, longitude);
         final Date date = new Date();
-        final String serializedDate = JsonTimeUtils.toString(date);
 
         final Post post = new Post();
         post.setType(type);
@@ -64,10 +63,6 @@ public class PostJsonHelperTest extends TestCase {
         final JSONArray colorJson = metaJson.getJSONArray(COLOR);
         assertEquals(1, colorJson.length());
         assertEquals(color.getValue(), colorJson.getString(0));
-
-        /* Server defines the publication date
-        assertEquals(serializedDate, metaJson.getString(PUBDATE));
-         */
     }
 
     public void testFromJson() throws JSONException {
@@ -89,17 +84,19 @@ public class PostJsonHelperTest extends TestCase {
                 .put(TYPE, type.getValue())
                 .put(IMAGES, new JSONArray().put(encodedImage))
                 .put(LOCATION, new JSONArray().put(latitude).put(longitude))
+                .put(PUBDATE, serializedDate)
                 .put(METADATA,
                         new JSONObject()
                                 .put(SPECIE, specie.getValue())
                                 .put(SIZE, size.getValue())
                                 .put(COLOR, new JSONArray().put(color))
-                                .put(PUBDATE, serializedDate));
+                );
 
         final Post post = PostJsonHelper.fromJSON(json);
 
         assertEquals(postId, post.getPostId());
         assertEquals(type, post.getType());
+        assertEquals(date, post.getPublicationDate());
 
         final Metadata meta = post.getMetadata();
         assertEquals(specie, meta.getSpecie());
@@ -116,8 +113,6 @@ public class PostJsonHelperTest extends TestCase {
         final Location postLocation = post.getLocation();
         assertEquals(latitude, postLocation.getLatitute());
         assertEquals(longitude, postLocation.getLongitude());
-
-        assertEquals(date, meta.getPublicationDate());
     }
 
     public void testFromJsonArray() throws JSONException {
@@ -140,12 +135,13 @@ public class PostJsonHelperTest extends TestCase {
                 .put(TYPE, type.getValue())
                 .put(IMAGES, new JSONArray().put(encodedImage))
                 .put(LOCATION, new JSONArray().put(latitude).put(longitude))
+                .put(PUBDATE, serializedDate)
                 .put(METADATA,
                         new JSONObject()
                                 .put(SPECIE, specie.getValue())
                                 .put(SIZE, size.getValue())
                                 .put(COLOR, new JSONArray().put(color))
-                                .put(PUBDATE, serializedDate)));
+                ));
 
         final List<Post> posts = PostJsonHelper.fromJson(json);
 

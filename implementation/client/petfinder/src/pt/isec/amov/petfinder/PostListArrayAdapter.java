@@ -69,7 +69,7 @@ public class PostListArrayAdapter extends ArrayAdapter<Post> {
     }
 
     private String getPublicationDate(final Post post) {
-        return dateFormat.format(post.getMetadata().getPublicationDate());
+        return dateFormat.format(post.getPublicationDate());
     }
 
 

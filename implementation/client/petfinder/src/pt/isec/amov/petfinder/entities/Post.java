@@ -17,7 +17,7 @@ public class Post {
     private List<byte[]> images = new ArrayList<byte[]>();
     private Location location;
     private Metadata metadata = new Metadata();
-
+    private Date publicationDate;
 
     public int getPostId() {
         return postId;
@@ -51,6 +51,14 @@ public class Post {
         this.location = location;
     }
 
+    public Date getPublicationDate() {
+        return publicationDate;
+    }
+
+    public void setPublicationDate(final Date publicationDate) {
+        this.publicationDate = publicationDate;
+    }
+
     public Metadata getMetadata() {
         return metadata;
     }
@@ -59,7 +67,6 @@ public class Post {
         private AnimalSpecie specie;
         private AnimalSize size;
         private final EnumSet<AnimalColor> colors = EnumSet.noneOf(AnimalColor.class);
-        private Date publicationDate;
 
         public AnimalSpecie getSpecie() {
             return specie;
@@ -80,14 +87,6 @@ public class Post {
 
         public EnumSet<AnimalColor> getColors() {
             return colors;
-        }
-
-        public Date getPublicationDate() {
-            return publicationDate;
-        }
-
-        public void setPublicationDate(final Date publicationDate) {
-            this.publicationDate = publicationDate;
         }
     }
 

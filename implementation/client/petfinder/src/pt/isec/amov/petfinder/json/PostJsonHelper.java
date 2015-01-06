@@ -60,20 +60,19 @@ public class PostJsonHelper {
         post.setType(PostType.fromValue(json.getString(TYPE)));
         post.getImages().addAll(imagesFromJsonArray(json.getJSONArray(IMAGES)));
         post.setLocation(locationFromJsonArray(json.getJSONArray(LOCATION)));
+        try {
+            post.setPublicationDate(JsonTimeUtils.fromString(json.getString(PUBDATE)));
+        } catch (final ParseException e) {
+            // We don't want to pollute the interface with a ParseException just because we chose to use
+            // Java's SimpleDateFormat to parse the dates. Wrap it in a JSONException
+            throw new JSONException("Cannot parse the publication date");
+        }
 
         final Metadata metadata = post.getMetadata();
         final JSONObject meta = json.getJSONObject(METADATA);
         metadata.setSpecie(AnimalSpecie.fromValue(meta.getString(SPECIE)));
         metadata.setSize(AnimalSize.fromValue(meta.getString(SIZE)));
         metadata.getColors().addAll(colorsFromJsonArray(meta.getJSONArray(COLOR)));
-
-        try {
-            metadata.setPublicationDate(JsonTimeUtils.fromString(meta.getString(PUBDATE)));
-        } catch (final ParseException e) {
-            // We don't want to pollute the interface with a ParseException just because we chose to use
-            // Java's SimpleDateFormat to parse the dates. Wrap it in a JSONException
-            throw new JSONException("Cannot parse the publication date");
-        }
 
         return post;
     }
