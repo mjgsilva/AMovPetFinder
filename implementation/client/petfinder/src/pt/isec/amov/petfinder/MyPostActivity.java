@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import pt.isec.amov.petfinder.core.PetFinderApp;
 import pt.isec.amov.petfinder.entities.Post;
+import pt.isec.amov.petfinder.rest.DeletePostTask;
 import pt.isec.amov.petfinder.rest.GetPostByIdTask;
 import pt.isec.amov.petfinder.rest.GetPostByIdTask.Parameters;
 import pt.isec.amov.petfinder.rest.GetPostsAdvancedTask;
@@ -21,14 +22,15 @@ public class MyPostActivity extends Activity implements PostFragment.PostHost, D
     public static final String PARAM_POST_ID = "postId";
 
     private Post post;
+    private PetFinderApp app;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_post_activity);
 
+        app = (PetFinderApp) getApplication();
         final FragmentManager fm = getFragmentManager();
-        final PetFinderApp app = (PetFinderApp) getApplication();
         final int id = getIntent().getExtras().getInt(PARAM_POST_ID);
 
         new GetPostByIdTask(app.getApiParams(), app.getToken().getAccessToken(), new Parameters(), id) {
@@ -70,7 +72,24 @@ public class MyPostActivity extends Activity implements PostFragment.PostHost, D
 
     @Override
     public void onDialogPostitiveClick(final DialogFragment dialog) {
-        Toast.makeText(this, "Delete post", Toast.LENGTH_SHORT).show();
+        //
+        new DeletePostTask(app.getApiParams(), app.getToken().getAccessToken(), new DeletePostTask.Parameters(), post.getPostId()) {
+            @Override
+            public void onPostExecute(final boolean deleted) {
+                final Activity activity = MyPostActivity.this;
+
+                if (deleted) {
+                    final String message = activity.getString(R.string.my_post_delete_success);
+                    Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    final String message = activity.getString(R.string.my_post_delete_failure);
+                    Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            // TODO add error handling
+        }.execute();
     }
 
     @Override

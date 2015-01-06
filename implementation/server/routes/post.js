@@ -66,7 +66,7 @@ exports.removePost = function(req, res) {
         else {
             Post.remove({ userId: tokenRecord.userId, postId: req.params.post_id }, function(err) {
                 if (err){ res.send(err) }
-                res.json({ "response": "ok" });
+                res.json({ "valid": "ok" });
             });
         }
     });

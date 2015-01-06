@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -136,6 +137,13 @@ public class WebServiceTask extends AsyncTask<Void, Integer, String> {
                     configureRequest(httpGet);
 
                     response = execute(httpClient, httpGet);
+                    break;
+                case DELETE:
+                    HttpDelete httpDelete = new HttpDelete(url);
+                    httpDelete.addHeader(CONTENT_TYPE, MIME_JSON);
+                    configureRequest(httpDelete);
+
+                    response = execute(httpClient, httpDelete);
                     break;
             }
         } catch (Exception e) {

@@ -46,6 +46,6 @@ public class GetPostByIdTask extends WebServiceTask {
     }
 
     public static class Parameters extends BaseParameters<Parameters> {
-
+        // This task has no specific parameters
     }
 }

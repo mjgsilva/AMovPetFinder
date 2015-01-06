@@ -49,4 +49,6 @@
     <string name="my_post_delete_confirmation">Are you sure you want do delete this post?</string>
     <string name="my_post_delete_confirmation_yes">Yes</string>
     <string name="my_post_delete_confirmation_no">No</string>
+    <string name="my_post_delete_success">The post was deleted successfully</string>
+    <string name="my_post_delete_failure">The post could not be deleted</string>
 </resources>
