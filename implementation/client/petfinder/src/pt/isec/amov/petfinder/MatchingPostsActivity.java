@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by mgois on 30-12-2014.
+ *
  */
 public class MatchingPostsActivity extends Activity implements PostListFragment.PostListHost{
 

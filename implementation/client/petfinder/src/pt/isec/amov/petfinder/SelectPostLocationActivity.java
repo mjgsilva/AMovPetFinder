@@ -18,6 +18,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * Created by mgois on 30-12-2014.
  */
 public class SelectPostLocationActivity extends Activity {
+
+    public static final String RESULT_LATITUDE = "lat";
+    public static final String RESULT_LONGITUDE = "lng";
+
     private final float MAP_ZOOM = 16;
     GoogleMap map;
     Marker marker;
@@ -42,8 +46,8 @@ public class SelectPostLocationActivity extends Activity {
                             double lat, lng;
                             lat = marker.getPosition().latitude;
                             lng = marker.getPosition().longitude;
-                            result.putExtra("lat",lat);
-                            result.putExtra("lng",lng);
+                            result.putExtra(RESULT_LATITUDE, lat);
+                            result.putExtra(RESULT_LONGITUDE, lng);
                             setResult(Activity.RESULT_OK, result);
                         } else {
                             setResult(Activity.RESULT_CANCELED, result);

@@ -11,6 +11,8 @@ import pt.isec.amov.petfinder.rest.MyPostsTask.Parameters;
 
 import java.util.List;
 
+import static pt.isec.amov.petfinder.MyPostActivity.PARAM_POST_ID;
+
 /**
  *
  */
@@ -48,7 +50,7 @@ public class MyPostsActivity extends Activity implements PostListFragment.PostLi
     @Override
     public void postSelected(final Post post) {
         final Intent intent = new Intent(this, MyPostActivity.class);
-        intent.putExtra(MyPostActivity.PARAM_POST_ID, post.getPostId());
+        intent.putExtra(PARAM_POST_ID, post.getPostId());
         startActivity(intent);
     }
 }

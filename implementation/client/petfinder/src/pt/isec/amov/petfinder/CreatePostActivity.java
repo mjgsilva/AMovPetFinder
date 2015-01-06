@@ -23,6 +23,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.EnumSet;
 
+import static pt.isec.amov.petfinder.MatchingPostsActivity.*;
+import static pt.isec.amov.petfinder.SelectPostLocationActivity.RESULT_LATITUDE;
+import static pt.isec.amov.petfinder.SelectPostLocationActivity.RESULT_LONGITUDE;
+
 /**
  * Created by mgois on 30-12-2014.
  */
@@ -216,11 +220,11 @@ public class CreatePostActivity extends Activity {
 
     private void launchMatchingPostActivity() {
         final Intent intent = new Intent(this,MatchingPostsActivity.class);
-        intent.putExtra("type",getSelectedType());
-        intent.putExtra("specie",getSelectedSpecie());
-        intent.putExtra("size",getSelectedSize());
-        intent.putExtra("color",getSelectedColors());
-        intent.putExtra("location",doubleToLocation(lat,lng));
+        intent.putExtra(PARAM_TYPE, getSelectedType());
+        intent.putExtra(PARAM_SPECIE, getSelectedSpecie());
+        intent.putExtra(PARAM_SIZE, getSelectedSize());
+        intent.putExtra(PARAM_COLORS, getSelectedColors());
+        intent.putExtra(PARAM_LOCATION, doubleToLocation(lat,lng));
         startActivity(intent);
     }
 
@@ -274,8 +278,8 @@ public class CreatePostActivity extends Activity {
         switch (requestCode) {
             case (REQ_GET_LOCATION) : {
                 if(resultCode == Activity.RESULT_OK) {
-                    lat = data.getDoubleExtra("lat", 0);
-                    lng = data.getDoubleExtra("lng", 0);
+                    lat = data.getDoubleExtra(RESULT_LATITUDE, 0);
+                    lng = data.getDoubleExtra(RESULT_LONGITUDE, 0);
                     locationDefined = true;
                     txtLocation.setText("[" + lat + "," + lng + "]");
                 } else {
