@@ -5,39 +5,52 @@
               android:layout_height="match_parent">
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/postFragment_imgPicture"
-            android:layout_weight="1"/>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/postFragment_imgPicture"
+                    />
+        </LinearLayout>
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="0dp"
+            android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_weight="3">
+            android:layout_weight="1">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Large Text"
-                android:id="@+id/postFragment_txtSpecie"/>
+                android:id="@+id/postFragment_txtSpecie"
+                android:paddingLeft="20dp"
+                android:textSize="20dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="New Text"
-                android:id="@+id/postFragment_txtSize"/>
+                android:id="@+id/postFragment_txtSize"
+                android:paddingLeft="20dp"
+                android:textSize="20dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="New Text"
-                android:id="@+id/postFragment_txtColors"/>
+                android:id="@+id/postFragment_txtColors"
+                android:paddingLeft="20dp"
+                android:textSize="20dp"/>
         </LinearLayout>
     </LinearLayout>
 
