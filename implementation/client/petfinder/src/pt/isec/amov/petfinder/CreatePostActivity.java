@@ -15,13 +15,14 @@ import pt.isec.amov.petfinder.core.*;
 import pt.isec.amov.petfinder.entities.Post;
 import pt.isec.amov.petfinder.rest.ApiParams;
 import pt.isec.amov.petfinder.rest.AuthenticateUserTask;
+import pt.isec.amov.petfinder.rest.CreatePostTask;
+import pt.isec.amov.petfinder.rest.GetPostsAdvancedTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.EnumSet;
+import java.util.*;
 
 import static pt.isec.amov.petfinder.MatchingPostsActivity.*;
 import static pt.isec.amov.petfinder.SelectPostLocationActivity.RESULT_LATITUDE;
@@ -39,10 +40,12 @@ public class CreatePostActivity extends Activity {
     private final String errNoPhoto = "Photo wasn't taken!";
     private final String errSavingPhoto = "An error occurred while saving the image";
     private final String errMissingRequiredFields = "Missing required fields";
+    private final String errCreatingPost = "Something went wrong.. try again!";
+    private final String successCreatingPost = "Created!";
 
     RadioGroup rgType, rgSpecie, rgSize;
     CheckBox cbWhite, cbBlack, cbBrown, cbGrey, cbYellow;
-    Button btnLocation, btnPhoto, btnMatchOrCreate;
+    Button btnLocation, btnPhoto, btnMatchPost, btnCreatePost;
     TextView txtType, txtSpecie, txtColor, txtSize, txtLocation;
     ImageView ivPhoto;
 
@@ -50,14 +53,13 @@ public class CreatePostActivity extends Activity {
     boolean locationDefined = false;
     double lat, lng;
     String photoPath;
-    boolean matchingActivityLaunched = false;
-
-    Post post = new Post();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_post_activity);
+
+        final PetFinderApp app = (PetFinderApp)getApplication();
 
         txtType = (TextView) findViewById(R.id.create_post_txtPostType);
         rgType = (RadioGroup) findViewById(R.id.create_post_rgType);
@@ -75,7 +77,8 @@ public class CreatePostActivity extends Activity {
         btnLocation = (Button) findViewById(R.id.create_post_btnLocation);
         btnPhoto = (Button) findViewById(R.id.create_post_btnPhoto);
         ivPhoto = (ImageView) findViewById(R.id.create_post_ivPhoto);
-        btnMatchOrCreate = (Button) findViewById(R.id.create_post_btnMatchOrCreate);
+        btnMatchPost = (Button) findViewById(R.id.create_post_btnMatchPost);
+        btnCreatePost = (Button) findViewById(R.id.create_post_btnCreatePost);
 
         defaultTextColor = txtType.getCurrentTextColor();
 
@@ -97,23 +100,63 @@ public class CreatePostActivity extends Activity {
                 }
         );
 
-        btnMatchOrCreate.setOnClickListener(
+        btnMatchPost.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if(validRequiredFields()) {
-                            matchingActivityLaunched = true;
                             launchMatchingPostActivity();
+                            btnCreatePost.setEnabled(true);
                         } else {
-                            showErrorMessage(errMissingRequiredFields);
+                            showMessage(errMissingRequiredFields);
+                        }
+                    }
+                }
+        );
+
+        btnCreatePost.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(validRequiredFields()) {
+
+
+                            PostType type = getSelectedType();
+                            Location location = doubleToLocation(lat,lng);
+                            AnimalSpecie specie = getSelectedSpecie();
+                            AnimalSize size = getSelectedSize();
+                            Set<AnimalColor> color = getSelectedColors();
+
+                            CreatePostTask.Parameters params = new CreatePostTask.Parameters(type,location,specie,size,color);
+
+                            if(photoPath != null) {
+                                List<byte[]> image = new ArrayList<byte[]>();
+                                image.add(photoFileToByte());
+                                params.setImage(image);
+                            }
+
+                            new CreatePostTask(app.getApiParams(), app.getToken().getAccessToken(), params) {
+
+                                @Override
+                                public void onTaskSuccess(final boolean valid) {
+                                    if(valid) {
+                                        showMessage(successCreatingPost);
+                                        launchMainActivity();
+                                    } else {
+                                        showMessage(errCreatingPost);
+                                    }
+                                }
+                            }.execute();
+                        } else {
+                            showMessage(errMissingRequiredFields);
                         }
                     }
                 }
         );
     }
 
-    private void showErrorMessage(String errMessage) {
-        Toast.makeText(getApplicationContext(), errMessage, Toast.LENGTH_LONG).show();
+    private void showMessage(String message) {
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
 
     private boolean validRequiredFields() {
@@ -218,6 +261,12 @@ public class CreatePostActivity extends Activity {
         return color;
     }
 
+    private void launchMainActivity() {
+        Intent intent = new Intent(this,MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
     private void launchMatchingPostActivity() {
         final Intent intent = new Intent(this,MatchingPostsActivity.class);
         intent.putExtra(PARAM_TYPE, getSelectedType());
@@ -242,7 +291,7 @@ public class CreatePostActivity extends Activity {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
                 startActivityForResult(intent, REQ_GET_PHOTO);
             } catch (final IOException ex) {
-                showErrorMessage(errSavingPhoto);
+                showMessage(errSavingPhoto);
             }
 
         }
@@ -283,7 +332,7 @@ public class CreatePostActivity extends Activity {
                     locationDefined = true;
                     txtLocation.setText("[" + lat + "," + lng + "]");
                 } else {
-                    showErrorMessage(errNoLocation);
+                    showMessage(errNoLocation);
                 }
                 break;
             }
@@ -293,7 +342,7 @@ public class CreatePostActivity extends Activity {
                         ivPhoto.setVisibility(View.VISIBLE);
                         ivPhoto.setImageBitmap(BitmapFactory.decodeFile(photoPath));
                     } else {
-                        showErrorMessage(errNoPhoto);
+                        showMessage(errNoPhoto);
                     }
                 }
                 break;

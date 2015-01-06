@@ -1,5 +1,6 @@
 package pt.isec.amov.petfinder.rest;
 
+import android.util.Log;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.json.JSONException;
@@ -9,9 +10,11 @@ import pt.isec.amov.petfinder.core.*;
 import java.util.List;
 import java.util.Set;
 
+import static pt.isec.amov.petfinder.json.PostJsonHelper.colorsToJsonArray;
 import static pt.isec.amov.petfinder.json.PostJsonHelper.imagesToJsonArray;
 import static pt.isec.amov.petfinder.rest.PostConstants.LATITUDE;
 import static pt.isec.amov.petfinder.rest.PostConstants.LONGITUDE;
+import static pt.isec.amov.petfinder.rest.PostConstants.Metadata.COLOR;
 import static pt.isec.amov.petfinder.rest.PostConstants.Metadata.SIZE;
 import static pt.isec.amov.petfinder.rest.PostConstants.Metadata.SPECIE;
 import static pt.isec.amov.petfinder.rest.PostConstants.IMAGES;
@@ -25,9 +28,9 @@ public class CreatePostTask extends WebServiceTask {
 
     private static final String PATH = "/post";
 
-    String accessToken;
+    private final String accessToken;
 
-    public CreatePostTask(final ApiParams apiParams, final String accessToken, final GetPostsAdvancedTask.Parameters params) {
+    public CreatePostTask(final ApiParams apiParams, final String accessToken, final Parameters params) {
         super(POST, params.getConnTimeout(), params.getSocketTimeout(), apiParams.getUrl(PATH), params.getBodyRequest());
         this.accessToken = accessToken;
     }
@@ -35,13 +38,16 @@ public class CreatePostTask extends WebServiceTask {
     @Override
     protected void configureRequest(final HttpUriRequest request) {
         final HttpPost post = (HttpPost) request;
-        post.addHeader(AUTH, BEARER + " ");
+        post.addHeader(AUTH, BEARER + " " + accessToken);
     }
 
     @Override
     protected void onTaskSuccess(final String response) {
         String valid = "";
         boolean isValid = false;
+        Log.d("onTaskSuccess", response);
+
+
         try {
             final JSONObject jsonObject = new JSONObject(response);
             valid = jsonObject.getString("valid");
@@ -69,13 +75,11 @@ public class CreatePostTask extends WebServiceTask {
             insertPair(LONGITUDE, Double.toString(location.getLongitude()));
             insertPair(SPECIE, specie.getValue());
             insertPair(SIZE, size.getValue());
-            /* insertPair(COLOR, colorsToJsonArray(color).toString()); */
+            insertPair(COLOR, colorsToJsonArray(color).toString());
         }
 
-        public Parameters image(final List<byte[]> image) {
+        public void setImage(final List<byte[]> image) {
             insertPair(IMAGES, imagesToJsonArray(image).toString());
-
-            return this;
         }
     }
 }

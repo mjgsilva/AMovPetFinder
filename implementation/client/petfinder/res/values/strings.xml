@@ -43,7 +43,8 @@
     <string name="create_post_descriptionPhoto">Animal Photo</string>
     <string name="create_post_txtLocation">[Location]</string>
     <string name="create_post_btnLocation">Set Location</string>
-    <string name="create_post_btnMatchOrCreate">Find Similar Posts</string>
+    <string name="create_post_btnMatchPost">Find Similar Posts</string>
+    <string name="create_post_btnCreatePost">Create Post</string>
     <string name="select_post_location_btnPinLocation">Pin</string>
     <string name="my_post_menu_delete">Delete</string>
     <string name="my_post_delete_confirmation">Are you sure you want do delete this post?</string>

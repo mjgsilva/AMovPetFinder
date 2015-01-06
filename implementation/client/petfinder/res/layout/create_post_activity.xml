@@ -5,7 +5,7 @@
     <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/scrollView"
+            android:id="@+id/create_post_scrollView"
             android:layout_gravity="center_horizontal">
 
         <LinearLayout
@@ -17,7 +17,7 @@
                     android:orientation="vertical"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:id="@+id/llytType">
+                    android:id="@+id/create_post_llytType">
 
                 <TextView
                         android:layout_width="wrap_content"
@@ -53,7 +53,7 @@
                     android:orientation="vertical"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:id="@+id/llytSpecie"
+                    android:id="@+id/create_post_llytSpecie"
                     android:paddingTop="22sp">
 
                 <TextView
@@ -91,7 +91,7 @@
                     android:orientation="vertical"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:id="@+id/llytSize"
+                    android:id="@+id/create_post_llytSize"
                     android:paddingTop="22dp">
 
                 <TextView
@@ -136,7 +136,7 @@
                     android:orientation="vertical"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:id="@+id/llytColor"
+                    android:id="@+id/create_post_llytColor"
                     android:paddingTop="22dp">
 
                 <TextView
@@ -200,7 +200,7 @@
                     android:orientation="vertical"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:id="@+id/llytLocation"
+                    android:id="@+id/create_post_llytLocation"
                     android:paddingTop="22dp">
 
                 <TextView
@@ -221,7 +221,7 @@
                     android:orientation="vertical"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:id="@+id/llytImage"
+                    android:id="@+id/create_post_llytImage"
                     android:paddingTop="22dp">
 
                 <ImageView
@@ -238,12 +238,26 @@
                         android:text="@string/create_post_btnPhoto"
                         android:id="@+id/create_post_btnPhoto"/>
             </LinearLayout>
-            <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/create_post_btnMatchOrCreate"
-                    android:id="@+id/create_post_btnMatchOrCreate"
-                    android:longClickable="false"/>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/create_post_llytButtons"
+                android:paddingTop="22dp">
+
+                <Button
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/create_post_btnMatchPost"
+                        android:id="@+id/create_post_btnMatchPost"
+                        />
+                <Button
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/create_post_btnCreatePost"
+                        android:id="@+id/create_post_btnCreatePost"
+                        android:enabled="false"/>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
