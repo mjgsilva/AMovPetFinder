@@ -294,7 +294,7 @@ public class CreatePostActivity extends Activity {
         intent.putExtra(PARAM_SPECIE, getSelectedSpecie());
         intent.putExtra(PARAM_SIZE, getSelectedSize());
         intent.putExtra(PARAM_COLORS, getSelectedColors());
-        intent.putExtra(PARAM_LOCATION, doubleToLocation(lat,lng));
+        intent.putExtra(PARAM_LOCATION, doubleToLocation(lat, lng));
         startActivity(intent);
     }
 
@@ -389,7 +389,7 @@ public class CreatePostActivity extends Activity {
                         bitmap.copyPixelsToBuffer(buffer);
                         photoBytes = buffer.array();
                     } catch (final FileNotFoundException e) {
-                        // TODO error handling
+                        Toast.makeText(CreatePostActivity.this, "Error picking image", Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;

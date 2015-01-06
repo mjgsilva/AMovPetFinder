@@ -6,7 +6,7 @@ import pt.isec.amov.petfinder.core.AnimalSize;
 import pt.isec.amov.petfinder.core.AnimalSpecie;
 
 /**
- * Created by mgois on 03-01-2015.
+ *
  */
 public class StringUtils {
 
