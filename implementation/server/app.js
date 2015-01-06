@@ -34,6 +34,9 @@ router.route('/post/:post_id')
 router.route('/myPosts')
     .get(authController.isBearerAuthenticated,postController.myPosts);
 
+router.route('/announcer/:post_id')
+    .get(authController.isBearerAuthenticated,postController.getAnnouncer)
+
 router.route('/find')
     .post(authController.isBearerAuthenticated,postController.findPost)
 

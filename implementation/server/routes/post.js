@@ -1,4 +1,5 @@
 var Post = require('../models/post')
+    , User = require('../models/user')
     , Token = require('../models/token')
     , utils = require('../models/utils')
     , constants = require('../models/constants')
@@ -36,6 +37,18 @@ exports.getPost = function(req, res) {
     Post.findOne({ postId: req.params.post_id }, function(err, post) {
        if(err) { res.send(err) }
         else { res.send(post) }
+    });
+};
+
+exports.getAnnouncer = function(req, res) {
+    Post.findOne({ postId: req.params.post_id }, function(err, post) {
+        if(err) { res.send(err) }
+        else {
+            User.findOne({ userId: post.userId }, function(err, user) {
+                if(err) { res.send(err) }
+                    else { res.send({"phoneNumber": user.phoneNumber}) }
+                });
+        }
     });
 };
 
