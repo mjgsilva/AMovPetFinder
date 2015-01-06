@@ -1,15 +1,14 @@
 package pt.isec.amov.petfinder.rest;
 
+import org.apache.http.client.methods.HttpPost;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONTokener;
 import pt.isec.amov.petfinder.core.*;
 import pt.isec.amov.petfinder.entities.Post;
-import pt.isec.amov.petfinder.json.JsonTimeUtils;
 import pt.isec.amov.petfinder.json.PostJsonHelper;
-import pt.isec.amov.petfinder.rest.PostConstants.Metadata;
 
-import java.util.Date;
+
 import java.util.List;
 import java.util.Set;
 
@@ -25,9 +24,18 @@ public class GetPostsAdvancedTask extends WebServiceTask {
 
     private static final String PATH = "/find";
 
-    public GetPostsAdvancedTask(final ApiParams apiParams, final Parameters params) {
+    private final String accessToken;
+
+    public GetPostsAdvancedTask(final ApiParams apiParams, final String accessToken, final Parameters params) {
         super(POST, params.getConnTimeout(), params.getSocketTimeout(), apiParams.getUrl(PATH), params.getBodyRequest());
+        this.accessToken = accessToken;
     }
+
+    @Override
+    protected void configureRequest(final HttpPost post) {
+        post.addHeader(AUTH, BEARER + " " + accessToken);
+    }
+
 
     @Override
     protected void onPostExecute(final String response) {
@@ -46,26 +54,14 @@ public class GetPostsAdvancedTask extends WebServiceTask {
     }
 
     public static class Parameters extends BaseParameters<Parameters> {
-
-        public Parameters(final PostType type, final Location location, final AnimalSpecie specie) {
+        public Parameters(final PostType type, final Location location, final AnimalSpecie specie, final AnimalSize size, final Set<AnimalColor> color) {
             // TODO validate null
             insertPair(TYPE, type.getValue());
             insertPair(LATITUDE, Double.toString(location.getLatitute()));
             insertPair(LONGITUDE, Double.toString(location.getLongitude()));
             insertPair(SPECIE, specie.getValue());
-        }
-
-        public Parameters size(final AnimalSize size) {
             insertPair(SIZE, size.getValue());
-
-            return this;
-        }
-
-        public Parameters color(final Set<AnimalColor> color) {
             insertPair(COLOR, colorsToJsonArray(color).toString());
-
-            return this;
         }
-
     }
 }
