@@ -2,6 +2,7 @@ package pt.isec.amov.petfinder;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 import pt.isec.amov.petfinder.core.PetFinderApp;
@@ -47,6 +48,8 @@ public class MyPostsActivity extends Activity implements PostListFragment.PostLi
 
     @Override
     public void postSelected(final Post post) {
-        Toast.makeText(this, "Show my post " + post, Toast.LENGTH_SHORT).show();
+        final Intent intent = new Intent(this, MyPostActivity.class);
+        intent.putExtra(MyPostActivity.PARAM_POST_ID, post.getPostId());
+        startActivity(intent);
     }
 }

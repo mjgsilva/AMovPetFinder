@@ -1,7 +1,10 @@
 package pt.isec.amov.petfinder.rest;
 
 import org.apache.http.client.methods.HttpGet;
+import org.json.JSONException;
+import org.json.JSONObject;
 import pt.isec.amov.petfinder.entities.Post;
+import pt.isec.amov.petfinder.json.PostJsonHelper;
 
 import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.GET;
 
@@ -25,8 +28,15 @@ public class GetPostByIdTask extends WebServiceTask {
     }
 
     @Override
-    protected void onPostExecute(final String s) {
+    protected void onPostExecute(final String response) {
+        try {
+            final JSONObject json = new JSONObject(response);
+            final Post post = PostJsonHelper.fromJSON(json);
 
+            onPostExecute(post);
+        } catch (final JSONException e) {
+            e.printStackTrace(); // TODO add proper error handling
+        }
     }
 
     public void onPostExecute(final Post post) {
