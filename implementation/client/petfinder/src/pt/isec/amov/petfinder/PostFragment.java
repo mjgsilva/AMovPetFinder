@@ -3,10 +3,14 @@ package pt.isec.amov.petfinder;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import pt.isec.amov.petfinder.core.AnimalColor;
 import pt.isec.amov.petfinder.entities.Post;
@@ -14,6 +18,7 @@ import pt.isec.amov.petfinder.ui.StringUtils;
 
 import java.util.Set;
 
+import static android.util.Base64.NO_WRAP;
 import static pt.isec.amov.petfinder.ui.StringUtils.getStringId;
 
 /**
@@ -54,9 +59,16 @@ public class PostFragment extends Fragment {
 
     private void bindPost(final Post post) {
         final View view = getView();
-        TextView txtSpecie = (TextView) view.findViewById(R.id.postFragment_txtSpecie);
-        TextView txtSize = (TextView) view.findViewById(R.id.postFragment_txtSize);
-        TextView txtColors = (TextView) view.findViewById(R.id.postFragment_txtColors);
+        final TextView txtSpecie = (TextView) view.findViewById(R.id.postFragment_txtSpecie);
+        final TextView txtSize = (TextView) view.findViewById(R.id.postFragment_txtSize);
+        final TextView txtColors = (TextView) view.findViewById(R.id.postFragment_txtColors);
+        final ImageView imgPicture = (ImageView) view.findViewById(R.id.postFragment_imgPicture);
+
+        if (post.getImages().size() > 0) {
+            final byte[] imageBytes = post.getImages().get(0);
+            final Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+            imgPicture.setImageBitmap(bitmap);
+        }
 
         final Resources res = getResources();
         final Post.Metadata meta = post.getMetadata();
