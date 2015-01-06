@@ -19,27 +19,29 @@ public class StartActivity extends Activity {
      * Called when the activity is first created.
      */
 
-    PetFinderApp petFinderApp;
+    PetFinderApp app;
     EditText edtUsername,edtPassword;
     Button btnSignIn;
     TextView txtSignUp;
+    String errSignIn, errFromServer;
 
     private String username, password;
-    private final String errSignIn= "Invalid input";
-    private final String errFromServer = "Invalid username or password";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.start_activity);
 
-        petFinderApp = (PetFinderApp)getApplication();
+        app = (PetFinderApp)getApplication();
         edtUsername = (EditText)findViewById(R.id.start_edtUsername);
         edtPassword = (EditText)findViewById(R.id.start_edtPassword);
         btnSignIn = (Button)findViewById(R.id.start_btnSignIn);
         txtSignUp = (TextView)findViewById(R.id.start_txtSignUp);
+        errSignIn = app.getString(R.string.start_btnSignIn);
+        errFromServer = app.getString(R.string.start_errFromServer);
 
-        if(!petFinderApp.getToken().isTokenExpired()) {
+
+        if(!app.getToken().isTokenExpired()) {
             launchMainActivity();
         }
 
@@ -53,7 +55,7 @@ public class StartActivity extends Activity {
                         if(isUsernameEmpty(username) || isPasswordEmpty(password)) {
                             showErrorMessage(errSignIn);
                         } else {
-                            ApiParams credentials = petFinderApp.getApiParams();
+                            ApiParams credentials = app.getApiParams();
                             final AuthenticateUserTask task = new AuthenticateUserTask(credentials,
                                     new AuthenticateUserTask.Parameters(username, password).setConnTimeout(5000)) {
 
@@ -98,11 +100,11 @@ public class StartActivity extends Activity {
     }
 
     private void setUpNewToken(String accessToken, String refreshToken, long expiresIn) {
-        Token token = petFinderApp.getToken();
+        Token token = app.getToken();
         token.setAccessToken(accessToken);
         token.setRefreshToken(refreshToken);
         token.setExpiresIn(expiresIn);
-        petFinderApp.putToken();
+        app.putToken();
     }
 
     private boolean isUsernameEmpty(String username) {

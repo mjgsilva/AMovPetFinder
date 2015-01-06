@@ -22,15 +22,13 @@ import pt.isec.amov.petfinder.rest.GetPostsAdvancedDetailsTask;
 public class MatchingPostDetailsActivity extends Activity implements PostFragment.PostHost {
 
     public static final String PARAM_POST_ID = "postId";
-    private final String msgFound = "You've found my pet! Call me when you can!";
-    private final String msgLost = "I've found your pet! Call me back!";
-    private final String sucessMsg = "SMS Sent!";
-    private final String errMsg = "Error sending the SMS";
+
 
     private Post post;
-
     PetFinderApp app;
     int id;
+    String foundMsg, lostMsg, successMsg, errMsg;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,6 +38,11 @@ public class MatchingPostDetailsActivity extends Activity implements PostFragmen
         app = (PetFinderApp) getApplication();
         final FragmentManager fm = getFragmentManager();
         id = getIntent().getExtras().getInt(PARAM_POST_ID);
+        foundMsg = app.getString(R.string.matching_post_details_menu_foundMsg);
+        lostMsg = app.getString(R.string.matching_post_details_menu_lostMsg);
+        successMsg = app.getString(R.string.matching_post_details_menu_successMsg);
+        errMsg = app.getString(R.string.matching_post_details_menu_errMsg);
+
 
         new GetPostByIdTask(app.getApiParams(), app.getToken().getAccessToken(), new GetPostByIdTask.Parameters(), id) {
             @Override
@@ -91,7 +94,7 @@ public class MatchingPostDetailsActivity extends Activity implements PostFragmen
         try {
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(phoneNumber, null, getSMSText(), null, null);
-            showMessage(sucessMsg);
+            showMessage(successMsg);
             launchMainActivity();
         } catch (Exception e) {
             showMessage(errMsg);
@@ -100,9 +103,9 @@ public class MatchingPostDetailsActivity extends Activity implements PostFragmen
 
     private String getSMSText() {
         if(post.getType() == PostType.FOUND)
-            return msgFound;
+            return foundMsg;
         else
-            return msgLost;
+            return lostMsg;
     }
 
     private void launchMainActivity() {
