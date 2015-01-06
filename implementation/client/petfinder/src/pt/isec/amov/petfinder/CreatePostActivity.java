@@ -36,13 +36,8 @@ public class CreatePostActivity extends Activity {
     private final int REQ_GET_LOCATION = 1;
     private final int REQ_GET_PHOTO = 2;
     private final int ERROR_COLOR = Color.RED;
-    private final String errNoLocation = "No location defined!";
-    private final String errNoPhoto = "Photo wasn't taken!";
-    private final String errSavingPhoto = "An error occurred while saving the image";
-    private final String errMissingRequiredFields = "Missing required fields";
-    private final String errCreatingPost = "Something went wrong.. try again!";
-    private final String successCreatingPost = "Created!";
 
+    String errNoLocation, errNoPhoto, errSavingPhoto, errMissingRequiredFields, errCreatingPost,successCreatingPost;
     RadioGroup rgType, rgSpecie, rgSize;
     CheckBox cbWhite, cbBlack, cbBrown, cbGrey, cbYellow;
     Button btnLocation, btnPhoto, btnMatchPost, btnCreatePost;
@@ -79,8 +74,14 @@ public class CreatePostActivity extends Activity {
         ivPhoto = (ImageView) findViewById(R.id.create_post_ivPhoto);
         btnMatchPost = (Button) findViewById(R.id.create_post_btnMatchPost);
         btnCreatePost = (Button) findViewById(R.id.create_post_btnCreatePost);
+        errNoLocation = app.getString(R.string.create_post_errNoLocation);
+        errNoPhoto = app.getString(R.string.create_post_errNoPhoto);
+        errSavingPhoto = app.getString(R.string.create_post_errSavingPhoto);
+        errMissingRequiredFields = app.getString(R.string.create_post_errMissingRequiredFields);
+        errCreatingPost = app.getString(R.string.create_post_errCreatingPost);
+        successCreatingPost = app.getString(R.string.create_post_successCreatingPost);
 
-        defaultTextColor = txtType.getCurrentTextColor();
+                defaultTextColor = txtType.getCurrentTextColor();
 
         btnPhoto.setOnClickListener(
                 new View.OnClickListener() {
