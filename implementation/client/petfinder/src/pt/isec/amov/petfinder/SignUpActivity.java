@@ -18,24 +18,23 @@ import pt.isec.amov.petfinder.rest.SignUpTask;
  */
 public class SignUpActivity extends Activity {
 
-    PetFinderApp petFinderApp;
+    PetFinderApp app;
     EditText edtUsername,edtPassword,edtPhoneNumber;
     Button btnSignUp;
-    String username, password,phoneNumber;
-
-    private final String errSignIn= "Invalid input";
-    private final String errFromServer = "Username already in use!";
+    String username, password,phoneNumber,errSignIn,errFromServer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_up_activity);
 
-        petFinderApp = (PetFinderApp)getApplication();
+        app = (PetFinderApp)getApplication();
         edtUsername = (EditText)findViewById(R.id.sign_up_edtUsername);
         edtPassword = (EditText)findViewById(R.id.sign_up_edtPassword);
         edtPhoneNumber = (EditText)findViewById(R.id.sign_up_edtPhoneNumber);
         btnSignUp = (Button)findViewById(R.id.sign_up_btnSignUp);
+        errSignIn = app.getString(R.string.sign_up_errSignIn);
+        errFromServer = app.getString(R.string.sign_up_errFromServer);
 
         phoneNumber = getPhoneNumber();
         if(!isPhoneNumberEmpty(phoneNumber)) {
@@ -54,7 +53,7 @@ public class SignUpActivity extends Activity {
                         if(isUsernameEmpty(username) || isPasswordEmpty(password) || isPhoneNumberEmpty(phoneNumber)) {
                             showErrorMessage(errSignIn);
                         } else {
-                            ApiParams apiParams = petFinderApp.getApiParams();
+                            ApiParams apiParams = app.getApiParams();
                             final SignUpTask task = new SignUpTask(apiParams,
                                     new SignUpTask.Parameters(username, password, phoneNumber).setConnTimeout(5000)) {
 
