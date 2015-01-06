@@ -62,11 +62,6 @@ public class CreatePostTask extends WebServiceTask<Boolean> {
         return isValid;
     }
 
-    @Override
-    public void onTaskSuccess(final Boolean valid) {
-        // override to provide some meaningful behavior
-    }
-
     public static class Parameters extends BaseParameters<Parameters> {
 
         public Parameters(final PostType type, final Location location, final AnimalSpecie specie, final AnimalSize size, final Set<AnimalColor> color) {

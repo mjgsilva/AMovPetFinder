@@ -46,11 +46,6 @@ public class MyPostsTask extends WebServiceTask<List<Post>> {
         return posts;
     }
 
-    @Override
-    public void onTaskSuccess(final List<Post> posts) {
-        // Override to provide meaningful behavior
-    }
-
     public static class Parameters extends BaseParameters<Parameters> {
         // This task has no specific parameters
     }

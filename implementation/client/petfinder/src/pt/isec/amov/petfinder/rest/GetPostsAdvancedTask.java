@@ -53,11 +53,6 @@ public class GetPostsAdvancedTask extends WebServiceTask<List<Post>> {
         return posts;
     }
 
-    @Override
-    public void onTaskSuccess(final List<Post> posts) {
-        // override to provide some meaningful behavior
-    }
-
     public static class Parameters extends BaseParameters<Parameters> {
         public Parameters(final PostType type, final Location location, final AnimalSpecie specie, final AnimalSize size, final Set<AnimalColor> color) {
             // TODO validate null

@@ -43,11 +43,6 @@ public class GetPostByIdTask extends WebServiceTask<Post> {
         return post;
     }
 
-    @Override
-    public void onTaskSuccess(final Post post) {
-        // Override to provide meaningful behavior
-    }
-
     public static class Parameters extends BaseParameters<Parameters> {
         // This task has no specific parameters
     }

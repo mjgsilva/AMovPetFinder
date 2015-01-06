@@ -40,11 +40,6 @@ public class SignUpTask extends WebServiceTask<Boolean> {
         return isValid;
     }
 
-    @Override
-    public void onTaskSuccess(final Boolean valid) {
-        // override to provide some meaningful behavior
-    }
-
     public static class Parameters extends BaseParameters<Parameters> {
 
         public static final String USERNAME = "username";

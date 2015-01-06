@@ -56,11 +56,6 @@ public class AuthenticateUserTask extends WebServiceTask<AuthenticateUserTask.To
         return new Tokens(isLoginValid, accessToken, refreshToken, expiresIn);
     }
 
-    @Override
-    public void onTaskSuccess(final Tokens tokens) {
-        // override to provide some meaningful behavior
-    }
-
     public class Tokens {
         public final boolean isLoginValid;
         public final String accessToken;
