@@ -2,12 +2,16 @@ package pt.isec.amov.petfinder;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import pt.isec.amov.petfinder.core.AnimalColor;
+import pt.isec.amov.petfinder.core.AnimalSpecie;
 import pt.isec.amov.petfinder.entities.Post;
 import pt.isec.amov.petfinder.ui.TimeUtils;
 
@@ -38,14 +42,24 @@ public class PostListArrayAdapter extends ArrayAdapter<Post> {
     @Override
     public View getView(final int position, final View convertView, final ViewGroup parent) {
         final View view = inflater.inflate(R.layout.post_list_item, parent, false);
+        final ImageView ivPostImage = (ImageView) view.findViewById(R.id.postListItem_imgPostImage);
         final TextView txtPostDescription = (TextView) view.findViewById(R.id.postListItem_txtPostDescription);
         final TextView txtPostPublicationDate = (TextView) view.findViewById(R.id.postListItem_txtPostPublicationDate);
 
         final Post post = posts.get(position);
+        Bitmap bm = BitmapFactory.decodeResource(context.getResources(), getIcon(post));
+        ivPostImage.setImageBitmap(bm);
         txtPostDescription.setText(getDescription(post));
         txtPostPublicationDate.setText(getPublicationDate(post));
 
         return view;
+    }
+
+    private int getIcon(final Post post) {
+        if(post.getMetadata().getSpecie() == AnimalSpecie.CAT)
+            return R.drawable.cat;
+        else
+            return R.drawable.dog;
     }
 
     private String getDescription(final Post post) {
@@ -62,7 +76,7 @@ public class PostListArrayAdapter extends ArrayAdapter<Post> {
         final StringBuilder sb = new StringBuilder();
 
         for (final AnimalColor color : colors) {
-            sb.append(res.getString(getStringId(color)));
+            sb.append(res.getString(getStringId(color)) + " ");
         }
 
         return sb.toString();

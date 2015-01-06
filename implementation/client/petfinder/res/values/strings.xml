@@ -46,7 +46,7 @@
     <string name="create_post_btnMatchPost">Find Similar Posts</string>
     <string name="create_post_btnCreatePost">Create Post</string>
     <string name="create_post_errNoLocation">No location defined!</string>
-    <string name="create_post_errNoPhoto">Photo wasn't taken!</string>
+    <string name="create_post_errNoPhoto">Photo wasn\'t taken!</string>
     <string name="create_post_errSavingPhoto">An error occurred while saving the image</string>
     <string name="create_post_errMissingRequiredFields">Missing required fields</string>
     <string name="create_post_errCreatingPost">Something went wrong.. try again!</string>
