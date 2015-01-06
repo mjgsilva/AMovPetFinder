@@ -34,9 +34,14 @@ public abstract class BaseParameters<T extends BaseParameters> {
 
     public void insertPair(String key, String value) {
         try {
-            requestBody.accumulate(key,value);
+            requestBody.accumulate(key, value);
         } catch (JSONException e) {}
     }
+
+    public void insertPair(String key, Object arr) {
+        try {
+            requestBody.put(key,arr);
+        } catch (JSONException e) {}    }
 
     public JSONObject getBodyRequest() { return requestBody; }
 }

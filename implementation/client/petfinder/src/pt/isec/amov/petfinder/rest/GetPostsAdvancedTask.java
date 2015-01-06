@@ -64,7 +64,7 @@ public class GetPostsAdvancedTask extends WebServiceTask {
             insertPair(LONGITUDE, Double.toString(location.getLongitude()));
             insertPair(SPECIE, specie.getValue());
             insertPair(SIZE, size.getValue());
-            insertPair(COLOR, colorsToJsonArray(color).toString());
+            insertPair(COLOR, colorsToJsonArray(color));
         }
     }
 }
