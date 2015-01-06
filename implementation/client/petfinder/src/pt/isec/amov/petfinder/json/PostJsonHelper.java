@@ -109,7 +109,7 @@ public class PostJsonHelper {
         return images;
     }
 
-    static JSONArray imagesToJsonArray(final List<byte[]> images) {
+    public static JSONArray imagesToJsonArray(final List<byte[]> images) {
         final JSONArray array = new JSONArray();
 
         for(final byte[] image : images) {
