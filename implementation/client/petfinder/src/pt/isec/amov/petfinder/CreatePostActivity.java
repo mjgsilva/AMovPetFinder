@@ -17,6 +17,7 @@ import pt.isec.amov.petfinder.core.*;
 import pt.isec.amov.petfinder.rest.CreatePostTask;
 
 import java.io.*;
+import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -31,10 +32,12 @@ public class CreatePostActivity extends Activity {
 
     private final int REQ_GET_LOCATION = 1;
     private final int REQ_GET_PHOTO = 2;
+    private final int REQ_PICK_PHOTO = 3;
     private final int ERROR_COLOR = Color.RED;
 
     String errNoLocation, errNoPhoto, errSavingPhoto, errMissingRequiredFields, errCreatingPost,successCreatingPost;
     RadioGroup rgType, rgSpecie, rgSize;
+    RadioButton rbLost, rbFound;
     CheckBox cbWhite, cbBlack, cbBrown, cbGrey, cbYellow;
     Button btnLocation, btnPhoto, btnMatchPost, btnCreatePost;
     TextView txtType, txtSpecie, txtColor, txtSize, txtLocation;
@@ -55,6 +58,8 @@ public class CreatePostActivity extends Activity {
 
         txtType = (TextView) findViewById(R.id.create_post_txtPostType);
         rgType = (RadioGroup) findViewById(R.id.create_post_rgType);
+        rbLost = (RadioButton) findViewById(R.id.create_post_rbLost);
+        rbFound = (RadioButton) findViewById(R.id.create_post_rbFound);
         txtSpecie = (TextView) findViewById(R.id.create_post_txtSpecie);
         rgSpecie = (RadioGroup) findViewById(R.id.create_post_rgSpecie);
         txtSize = (TextView) findViewById(R.id.create_post_txtSize);
@@ -78,13 +83,31 @@ public class CreatePostActivity extends Activity {
         errCreatingPost = app.getString(R.string.create_post_errCreatingPost);
         successCreatingPost = app.getString(R.string.create_post_successCreatingPost);
 
-                defaultTextColor = txtType.getCurrentTextColor();
+        defaultTextColor = txtType.getCurrentTextColor();
 
+        rbLost.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                btnPhoto.setText(getString(R.string.create_post_pick_photo));
+                btnPhoto.setEnabled(true);
+            }
+        });
+        rbFound.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                btnPhoto.setText(getString(R.string.create_post_take_photo));
+                btnPhoto.setEnabled(true);
+            }
+        });
         btnPhoto.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        launchTakePhotoActivityForResult();
+                        if (rbFound.isChecked()) {
+                            launchTakePhotoActivityForResult();
+                        } else {
+                            launchPickPhotoActivityForResult();
+                        }
                     }
                 }
         );
@@ -127,11 +150,6 @@ public class CreatePostActivity extends Activity {
 
                             CreatePostTask.Parameters params = new CreatePostTask.Parameters(type,location,specie,size,color);
 
-//                            if(photoPath != null) {
-//                                List<byte[]> image = new ArrayList<byte[]>();
-//                                image.add(photoFileToByte());
-//                                params.setImage(image);
-//                            }
                             if(photoBytes != null) {
                                 List<byte[]> image = new ArrayList<byte[]>();
                                 image.add(photoBytes);
@@ -300,6 +318,11 @@ public class CreatePostActivity extends Activity {
         }
     }
 
+    private void launchPickPhotoActivityForResult() {
+        final Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, REQ_PICK_PHOTO);
+    }
+
     private Location doubleToLocation(double lat, double lng) {
             return new Location(lat,lng);
     }
@@ -355,8 +378,22 @@ public class CreatePostActivity extends Activity {
                 }
                 break;
             }
-            default:
+            case (REQ_PICK_PHOTO): {
+                if (resultCode == RESULT_OK) {
+                    final Uri targetUri = data.getData();
+                    try {
+                        final Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(targetUri));
+                        ivPhoto.setImageBitmap(bitmap);
+
+                        final ByteBuffer buffer = ByteBuffer.allocate(bitmap.getByteCount());
+                        bitmap.copyPixelsToBuffer(buffer);
+                        photoBytes = buffer.array();
+                    } catch (final FileNotFoundException e) {
+                        // TODO error handling
+                    }
+                }
                 break;
+            }
         }
     }
 

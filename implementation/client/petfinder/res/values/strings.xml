@@ -46,11 +46,13 @@
     <string name="create_post_btnMatchPost">Find Similar Posts</string>
     <string name="create_post_btnCreatePost">Create Post</string>
     <string name="create_post_errNoLocation">No location defined!</string>
-    <string name="create_post_errNoPhoto">Photo wasn't taken!</string>
+    <string name="create_post_errNoPhoto">Photo wasn\'t taken!</string>
     <string name="create_post_errSavingPhoto">An error occurred while saving the image</string>
     <string name="create_post_errMissingRequiredFields">Missing required fields</string>
     <string name="create_post_errCreatingPost">Something went wrong.. try again!</string>
     <string name="create_post_successCreatingPost">Created!</string>
+    <string name="create_post_take_photo">Take a photo</string>
+    <string name="create_post_pick_photo">Pick a photo</string>
     <string name="select_post_location_btnPinLocation">Pin</string>
     <string name="my_posts_load_error">An error occurred while loading the post list</string>
     <string name="matching_post_details_menu_contact">Send a SMS</string>
