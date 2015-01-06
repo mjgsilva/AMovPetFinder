@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -12,6 +13,8 @@ import android.view.View;
 import android.widget.*;
 import pt.isec.amov.petfinder.core.*;
 import pt.isec.amov.petfinder.entities.Post;
+import pt.isec.amov.petfinder.rest.ApiParams;
+import pt.isec.amov.petfinder.rest.AuthenticateUserTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -27,18 +30,23 @@ public class CreatePostActivity extends Activity {
 
     private final int REQ_GET_LOCATION = 1;
     private final int REQ_GET_PHOTO = 2;
+    private final int ERROR_COLOR = Color.RED;
     private final String errNoLocation = "No location defined!";
     private final String errNoPhoto = "Photo wasn't taken!";
     private final String errSavingPhoto = "An error occurred while saving the image";
+    private final String errMissingRequiredFields = "Missing required fields";
 
     RadioGroup rgType, rgSpecie, rgSize;
     CheckBox cbWhite, cbBlack, cbBrown, cbGrey, cbYellow;
     Button btnLocation, btnPhoto, btnMatchOrCreate;
-    TextView txtLocation;
+    TextView txtType, txtSpecie, txtColor, txtSize, txtLocation;
     ImageView ivPhoto;
 
+    int defaultTextColor;
+    boolean locationDefined = false;
     double lat, lng;
     String photoPath;
+    boolean matchingActivityLaunched = false;
 
     Post post = new Post();
 
@@ -47,9 +55,13 @@ public class CreatePostActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_post_activity);
 
+        txtType = (TextView) findViewById(R.id.create_post_txtPostType);
         rgType = (RadioGroup) findViewById(R.id.create_post_rgType);
+        txtSpecie = (TextView) findViewById(R.id.create_post_txtSpecie);
         rgSpecie = (RadioGroup) findViewById(R.id.create_post_rgSpecie);
+        txtSize = (TextView) findViewById(R.id.create_post_txtSize);
         rgSize = (RadioGroup) findViewById(R.id.create_post_rgSize);
+        txtColor = (TextView) findViewById(R.id.create_post_txtColor);
         cbWhite = (CheckBox) findViewById(R.id.create_post_cbColorWhite);
         cbBlack = (CheckBox) findViewById(R.id.create_post_cbColorBlack);
         cbBrown = (CheckBox) findViewById(R.id.create_post_cbColorBrown);
@@ -60,6 +72,8 @@ public class CreatePostActivity extends Activity {
         btnPhoto = (Button) findViewById(R.id.create_post_btnPhoto);
         ivPhoto = (ImageView) findViewById(R.id.create_post_ivPhoto);
         btnMatchOrCreate = (Button) findViewById(R.id.create_post_btnMatchOrCreate);
+
+        defaultTextColor = txtType.getCurrentTextColor();
 
         btnPhoto.setOnClickListener(
                 new View.OnClickListener() {
@@ -83,8 +97,12 @@ public class CreatePostActivity extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        btnMatchOrCreate.setText("Create");
-
+                        if(validRequiredFields()) {
+                            matchingActivityLaunched = true;
+                            launchMatchingPostActivity();
+                        } else {
+                            showErrorMessage(errMissingRequiredFields);
+                        }
                     }
                 }
         );
@@ -94,14 +112,57 @@ public class CreatePostActivity extends Activity {
         Toast.makeText(getApplicationContext(), errMessage, Toast.LENGTH_LONG).show();
     }
 
-    private void buildPostObject() {
-        post.setType(getSelectedType());
-        post.setLocation(doubleToLatLng(lat, lng));
-        post.getMetadata().setSize(getSelectedSize());
-        post.getMetadata().setSpecie(getSelectedSpecie());
-        setSelectedColors(post.getMetadata().getColors());
-        post.setImages(photoFileToByte());
+    private boolean validRequiredFields() {
+        if(isTypeValid() && isSpecieValid() && isSizeValid() && isColorValid() && isLocationValid())
+            return true;
+        else
+            return false;
     }
+
+    private boolean isTypeValid() {
+        if(getSelectedType() == null) {
+            txtType.setTextColor(ERROR_COLOR);
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isSpecieValid() {
+        if(getSelectedSpecie() == null) {
+            txtSpecie.setTextColor(ERROR_COLOR);
+            return false;
+        }
+        txtSpecie.setTextColor(defaultTextColor);
+        return true;
+    }
+
+    private boolean isSizeValid() {
+        if(getSelectedSize() == null) {
+            txtSize.setTextColor(ERROR_COLOR);
+            return false;
+        }
+        txtSpecie.setTextColor(defaultTextColor);
+        return true;
+    }
+
+    private boolean isColorValid() {
+        if(getSelectedColors().size() > 0) {
+            txtColor.setTextColor(defaultTextColor);
+            return true;
+        }
+        txtColor.setTextColor(ERROR_COLOR);
+        return false;
+    }
+
+    private boolean isLocationValid() {
+        if(locationDefined) {
+            txtSpecie.setTextColor(defaultTextColor);
+            return true;
+        }
+        txtLocation.setTextColor(ERROR_COLOR);
+        return false;
+    }
+
 
     private PostType getSelectedType() {
         switch(rgType.getCheckedRadioButtonId()) {
@@ -138,21 +199,29 @@ public class CreatePostActivity extends Activity {
         }
     }
 
-    private void setSelectedColors(EnumSet<AnimalColor> colors) {
+    private EnumSet<AnimalColor> getSelectedColors() {
+        EnumSet<AnimalColor> color = EnumSet.noneOf(AnimalColor.class);
         if(cbWhite.isChecked())
-            colors.add(AnimalColor.WHITE);
+            color.add(AnimalColor.WHITE);
         if(cbBlack.isChecked())
-            colors.add(AnimalColor.BLACK);
+            color.add(AnimalColor.BLACK);
         if(cbBrown.isChecked())
-            colors.add(AnimalColor.BROWN);
+            color.add(AnimalColor.BROWN);
         if(cbGrey.isChecked())
-            colors.add(AnimalColor.GREY);
+            color.add(AnimalColor.GREY);
         if(cbYellow.isChecked())
-            colors.add(AnimalColor.YELLOW);
+            color.add(AnimalColor.YELLOW);
+        return color;
     }
 
     private void launchMatchingPostActivity() {
         final Intent intent = new Intent(this,MatchingPostsActivity.class);
+        intent.putExtra("type",getSelectedType());
+        intent.putExtra("specie",getSelectedSpecie());
+        intent.putExtra("size",getSelectedSize());
+        intent.putExtra("color",getSelectedColors());
+        intent.putExtra("location",doubleToLocation(lat,lng));
+        startActivity(intent);
     }
 
     private void launchSetLocationActivityForResult() {
@@ -175,11 +244,8 @@ public class CreatePostActivity extends Activity {
         }
     }
 
-    private Location doubleToLatLng(Double lat, Double lng) {
-        if(!lat.isNaN() && !lng.isNaN())
+    private Location doubleToLocation(double lat, double lng) {
             return new Location(lat,lng);
-        else
-            return null;
     }
 
     private File createImageFile() throws IOException {
@@ -210,6 +276,7 @@ public class CreatePostActivity extends Activity {
                 if(resultCode == Activity.RESULT_OK) {
                     lat = data.getDoubleExtra("lat", 0);
                     lng = data.getDoubleExtra("lng", 0);
+                    locationDefined = true;
                     txtLocation.setText("[" + lat + "," + lng + "]");
                 } else {
                     showErrorMessage(errNoLocation);

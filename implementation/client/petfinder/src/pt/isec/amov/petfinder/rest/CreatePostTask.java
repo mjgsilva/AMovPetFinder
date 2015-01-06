@@ -1,8 +1,21 @@
 package pt.isec.amov.petfinder.rest;
 
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+import pt.isec.amov.petfinder.core.*;
 
+import java.util.List;
+import java.util.Set;
+
+import static pt.isec.amov.petfinder.json.PostJsonHelper.colorsToJsonArray;
+import static pt.isec.amov.petfinder.json.PostJsonHelper.imagesToJsonArray;
+import static pt.isec.amov.petfinder.rest.PostConstants.LATITUDE;
+import static pt.isec.amov.petfinder.rest.PostConstants.LONGITUDE;
+import static pt.isec.amov.petfinder.rest.PostConstants.Metadata.SIZE;
+import static pt.isec.amov.petfinder.rest.PostConstants.Metadata.SPECIE;
+import static pt.isec.amov.petfinder.rest.PostConstants.IMAGES;
+import static pt.isec.amov.petfinder.rest.PostConstants.TYPE;
 import static pt.isec.amov.petfinder.rest.WebServiceTask.TaskType.POST;
 
 /**
@@ -12,8 +25,11 @@ public class CreatePostTask extends WebServiceTask {
 
     private static final String PATH = "/post";
 
-    public CreatePostTask(final ApiParams apiParams, final GetPostsAdvancedTask.Parameters params) {
+    String accessToken;
+
+    public CreatePostTask(final ApiParams apiParams, final String accessToken, final GetPostsAdvancedTask.Parameters params) {
         super(POST, params.getConnTimeout(), params.getSocketTimeout(), apiParams.getUrl(PATH), params.getBodyRequest());
+        this.accessToken = accessToken;
     }
 
     @Override
@@ -23,10 +39,16 @@ public class CreatePostTask extends WebServiceTask {
 
     @Override
     protected void onPostExecute(final String response) {
-        // TODO deserialize the response into the following variables
+        String valid = "";
         boolean isValid = false;
+        try {
+            final JSONObject jsonObject = new JSONObject(response);
+            valid = jsonObject.getString("valid");
+        } catch(JSONException e) { e.printStackTrace(); }
 
-        // call the task-specific overload
+        if(valid.equals("ok"))
+            isValid = true;
+
         this.onPostExecute(isValid);
     }
 
@@ -36,43 +58,18 @@ public class CreatePostTask extends WebServiceTask {
 
     public static class Parameters extends BaseParameters<Parameters> {
 
-        // TODO deprecate these constants and user the ones in the interface PostConstants?
-        public static final String POST_TYPE = "type";
-        public static final String LATITUDE = "lat";
-        public static final String LONGITUDE = "long";
-        public static final String SPECIE = "specie";
-        public static final String IMAGE = "image";
-        public static final String SIZE = "size";
-        public static final String COLOR = "color";
-        public static final String OBSERVATIONS = "obs";
-
-        public Parameters(final String postType, final String latitude, final String longitude, final String specie) {
-            insertPair(POST_TYPE, postType);
-            insertPair(LATITUDE, latitude);
-            insertPair(LONGITUDE, longitude);
-            insertPair(SPECIE, specie);
+        public Parameters(final PostType type, final Location location, final AnimalSpecie specie, final AnimalSize size, final Set<AnimalColor> color) {
+            // TODO validate null
+            insertPair(TYPE, type.getValue());
+            insertPair(LATITUDE, Double.toString(location.getLatitute()));
+            insertPair(LONGITUDE, Double.toString(location.getLongitude()));
+            insertPair(SPECIE, specie.getValue());
+            insertPair(SIZE, size.getValue());
+            /* insertPair(COLOR, colorsToJsonArray(color).toString()); */
         }
 
-        public Parameters image(final String image) {
-            insertPair(IMAGE, image);
-
-            return this;
-        }
-
-        public Parameters size(final String size) {
-            insertPair(SIZE, size);
-
-            return this;
-        }
-
-        public Parameters color(final String color) {
-            insertPair(COLOR, color);
-
-            return this;
-        }
-
-        public Parameters observation(final String observation) {
-            insertPair(OBSERVATIONS, observation);
+        public Parameters image(final List<byte[]> image) {
+            insertPair(IMAGES, imagesToJsonArray(image).toString());
 
             return this;
         }
