@@ -23,4 +23,26 @@
     <string name="color_brown">castanho</string>
     <string name="color_grey">grey</string>
     <string name="color_yellow">amarelo</string>
+    <string name="create_post_txtPostType">I\'ve .. an animal:</string>
+    <string name="create_post_rbFound">Found</string>
+    <string name="create_post_rbLost">Lost</string>
+    <string name="create_post_txtSpecie">It\'s a ..</string>
+    <string name="create_post_txtSize">Size</string>
+    <string name="create_post_rbDog">Dog</string>
+    <string name="create_post_rbCat">Cat</string>
+    <string name="create_post_rbSmallSize">Small</string>
+    <string name="create_post_rbMediumSize">Medium</string>
+    <string name="create_post_rbLargeSize">Large</string>
+    <string name="create_post_txtColor">Color</string>
+    <string name="create_post_cbColorWhite">White</string>
+    <string name="create_post_cbColorBlack">Black</string>
+    <string name="create_post_cbColorBrown">Brown</string>
+    <string name="create_post_cbColorGrey">Grey</string>
+    <string name="create_post_cbColorYellow">Yellow</string>
+    <string name="create_post_btnPhoto">Take a Photo</string>
+    <string name="create_post_descriptionPhoto">Animal Photo</string>
+    <string name="create_post_txtLocation">[Location]</string>
+    <string name="create_post_btnLocation">Set Location</string>
+    <string name="create_post_btnMatchOrCreate">Find Similar Posts</string>
+    <string name="select_post_location_btnPinLocation">Pin</string>
 </resources>

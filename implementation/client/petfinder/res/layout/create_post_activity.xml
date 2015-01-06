@@ -2,4 +2,249 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/scrollView"
+            android:layout_gravity="center_horizontal">
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/llytType">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/create_post_txtPostType"
+                        android:id="@+id/create_post_txtPostType"
+                        android:textSize="26sp"/>
+
+                <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:id="@+id/create_post_rgType"
+                            android:paddingTop="5dp">
+
+                    <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/create_post_rbLost"
+                            android:id="@+id/create_post_rbLost"/>
+
+                    <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/create_post_rbFound"
+                            android:id="@+id/create_post_rbFound"
+                            />
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/llytSpecie"
+                    android:paddingTop="22sp">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/create_post_txtSpecie"
+                        android:id="@+id/create_post_txtSpecie"
+                        android:textSize="26sp"/>
+
+                <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:id="@+id/create_post_rgSpecie"
+                            android:paddingTop="5dp">
+
+                <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/create_post_rbDog"
+                            android:id="@+id/create_post_rbDog"/>
+
+                    <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/create_post_rbCat"
+                            android:id="@+id/create_post_rbCat"
+                            />
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/llytSize"
+                    android:paddingTop="22dp">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/create_post_txtSize"
+                        android:id="@+id/create_post_txtSize"
+                        android:textSize="26sp"/>
+
+                <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:id="@+id/create_post_rgSize"
+                            android:paddingTop="5dp">
+
+                <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/create_post_rbSmallSize"
+                            android:id="@+id/create_post_rbSmallSize"/>
+
+                    <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/create_post_rbMediumSize"
+                            android:id="@+id/create_post_rbMediumSize"
+                            />
+
+                    <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/create_post_rbLargeSize"
+                            android:id="@+id/create_post_rbLargeSize"
+                            />
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/llytColor"
+                    android:paddingTop="22dp">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/create_post_txtColor"
+                        android:id="@+id/create_post_txtColor"
+                        android:textSize="26sp"/>
+
+                <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:paddingTop="5dp">
+
+                        <CheckBox
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/create_post_cbColorWhite"
+                                android:id="@+id/create_post_cbColorWhite"
+                                />
+                        <CheckBox
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/create_post_cbColorBlack"
+                                android:id="@+id/create_post_cbColorBlack"
+                                />
+
+                        <CheckBox
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/create_post_cbColorBrown"
+                                android:id="@+id/create_post_cbColorBrown"
+                                />
+                </LinearLayout>
+
+                <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+
+                        <CheckBox
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/create_post_cbColorGrey"
+                                android:id="@+id/create_post_cbColorGrey"
+                                />
+
+                        <CheckBox
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/create_post_cbColorYellow"
+                                android:id="@+id/create_post_cbColorYellow"
+                                />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/llytLocation"
+                    android:paddingTop="22dp">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/create_post_txtLocation"
+                        android:id="@+id/create_post_txtLocation"
+                        android:textSize="26sp"/>
+
+                <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/create_post_btnLocation"
+                        android:id="@+id/create_post_btnLocation"/>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/llytImage"
+                    android:paddingTop="22dp">
+
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/create_post_ivPhoto"
+                        android:visibility="invisible"
+                        android:contentDescription="@string/create_post_descriptionPhoto"
+                        android:maxHeight="400dp"/>
+
+                <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/create_post_btnPhoto"
+                        android:id="@+id/create_post_btnPhoto"/>
+            </LinearLayout>
+            <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/create_post_btnMatchOrCreate"
+                    android:id="@+id/create_post_btnMatchOrCreate"
+                    android:longClickable="false"/>
+        </LinearLayout>
+    </ScrollView>
+
 </LinearLayout>

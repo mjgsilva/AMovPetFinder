@@ -13,11 +13,11 @@ import java.util.List;
  */
 public class Post {
     private int postId;
-    private int userId;
     private PostType type;
-    private Metadata metadata = new Metadata();
     private List<byte[]> images = new ArrayList<byte[]>();
     private Location location;
+    private Metadata metadata = new Metadata();
+
 
     public int getPostId() {
         return postId;
@@ -27,20 +27,16 @@ public class Post {
         this.postId = postId;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
     public PostType getType() {
         return type;
     }
 
     public void setType(PostType type) {
         this.type = type;
+    }
+
+    public void setImages(byte[] image) {
+        images.add(image);
     }
 
     public List<byte[]> getImages() {
